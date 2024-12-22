@@ -5,6 +5,15 @@
         </h2>
     </x-slot>
 
+    <!-- Show success or error messages -->
+    @if (session('status'))
+        <div class="card mb-4">
+            <div class="card-body text-white {{ session('status_type') == 'success' ? 'bg-success' : 'bg-danger' }}">
+                <p class="mb-0">{{ session('status') }}</p>
+            </div>
+        </div>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
