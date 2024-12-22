@@ -22,8 +22,11 @@
 
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                    name="name" value="{{ old('name') }}" required>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                        name="name" value="{{ old('name') }}" required>
+                </div>
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -31,8 +34,11 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                    name="email" value="{{ old('email') }}" required>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                        name="email" value="{{ old('email') }}" required>
+                </div>
                 @error('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -40,8 +46,11 @@
 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
-                    name="password" required>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
+                        name="password" required>
+                </div>
                 @error('password')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -49,14 +58,26 @@
 
             <div class="mb-3">
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                    required>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                        required>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Add User</button>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-dark">
+                    <i class="fas fa-user-plus"></i> Add User
+                </button>
+                <a href="{{ route('admin.manage-users') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to User Management
+                </a>
+            </div>
         </form>
 
-        <!-- Back Button -->
-        <a href="{{ route('admin.manage-users') }}" class="btn btn-secondary mb-3">Back to User Management</a>
     </div>
+
+    <!-- FontAwesome CDN -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </x-app-layout>

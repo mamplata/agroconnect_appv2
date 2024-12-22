@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-success border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -13,15 +13,15 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if (auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            {{ __('Dashboard') }}
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-white font-bold">
+                            <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')">
-                            {{ __('Manage User') }}
+                        <x-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')" class="text-white font-bold">
+                            <i class="fas fa-users me-2"></i>{{ __('Manage Users') }}
                         </x-nav-link>
                     @elseif(auth()->user()->role === 'user')
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white font-bold">
+                            <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -33,7 +33,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-transparent hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -48,8 +48,8 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                        <x-dropdown-link :href="route('profile.edit')" class="font-bold">
+                            <i class="fas fa-user me-2"></i>{{ __('Profile') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -58,8 +58,9 @@
 
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                                this.closest('form').submit();"
+                                class="font-bold">
+                                <i class="fas fa-sign-out-alt me-2"></i>{{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -86,15 +87,15 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @if (auth()->user()->role === 'admin')
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    {{ __('Dashboard') }}
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-white font-bold">
+                    <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')">
-                    {{ __('Manage User') }}
+                <x-responsive-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')" class="text-white font-bold">
+                    <i class="fas fa-users me-2"></i>{{ __('Manage User') }}
                 </x-responsive-nav-link>
             @elseif(auth()->user()->role === 'user')
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white font-bold">
+                    <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -102,13 +103,13 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-base text-white">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                <x-responsive-nav-link :href="route('profile.edit')" class="text-white font-bold">
+                    <i class="fas fa-user me-2"></i>{{ __('Profile') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -117,8 +118,9 @@
 
                     <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                                        this.closest('form').submit();"
+                        class="text-white font-bold">
+                        <i class="fas fa-sign-out-alt me-2"></i>{{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
