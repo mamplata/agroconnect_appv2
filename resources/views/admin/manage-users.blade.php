@@ -6,7 +6,6 @@
     </x-slot>
 
     <div class="container mt-5">
-
         <!-- Show success or error messages -->
         @if (session('status'))
             <div class="card mb-4">
@@ -34,9 +33,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($users as $index => $user)
                         <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-light' : '' }}">
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $users->firstItem() + $index }}</td> <!-- Adjust numbering for pagination -->
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
@@ -53,17 +52,18 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination Links -->
+        <div class="d-flex justify-content-center">
+            {{ $users->links() }}
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ensure that all buttons reflect the correct status and color on initial load
             const statusButtons = document.querySelectorAll('[data-status]');
             statusButtons.forEach(function(button) {
-                const currentStatus = button.getAttribute('data-status') === '1' ? 1 :
-                    0; // Active (1) or Inactive (0)
-
-                // Set the button color based on the current status
+                const currentStatus = button.getAttribute('data-status') === '1' ? 1 : 0;
                 if (currentStatus === 1) {
                     button.classList.add('btn-danger');
                     button.classList.remove('btn-success');
@@ -76,8 +76,7 @@
 
         function toggleStatus(button) {
             const userId = button.getAttribute('data-id');
-            const currentStatus = button.getAttribute('data-status') === '1' ? 1 :
-                0; // Current status: 1 = Active, 0 = Inactive
+            const currentStatus = button.getAttribute('data-status') === '1' ? 1 : 0;
 
             fetch(`/admin/toggle-status/${userId}`, {
                     method: 'POST',
@@ -89,29 +88,23 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Determine new status
-                        const newStatus = currentStatus === 1 ? 0 : 1; // Toggle the status
-
-                        // Clear the button content and add new icon and text based on new status
-                        button.innerHTML = ''; // Reset the button content
+                        const newStatus = currentStatus === 1 ? 0 : 1;
+                        button.innerHTML = '';
                         const icon = document.createElement('i');
                         icon.classList.add('fas', 'fa-toggle-' + (newStatus ? 'on' : 'off'));
                         button.appendChild(icon);
                         button.appendChild(document.createTextNode(' ' + (newStatus ? 'Deactivate' : 'Activate')));
 
-                        // Toggle button color based on the new status
                         if (newStatus) {
-                            button.classList.add('btn-danger'); // Active - green
-                            button.classList.remove('btn-success'); // Inactive - red
+                            button.classList.add('btn-danger');
+                            button.classList.remove('btn-success');
                         } else {
-                            button.classList.add('btn-success'); // Inactive - red
-                            button.classList.remove('btn-danger'); // Active - green
+                            button.classList.add('btn-success');
+                            button.classList.remove('btn-danger');
                         }
 
-                        // Update the status value on the button
-                        button.setAttribute('data-status', newStatus); // Update the status value
+                        button.setAttribute('data-status', newStatus);
 
-                        // Update the status column in the table immediately
                         const statusCell = button.closest('tr').querySelector('td:nth-child(4)');
                         statusCell.textContent = newStatus ? 'Active' : 'Inactive';
                     } else {
@@ -123,24 +116,19 @@
     </script>
 
     <style>
-        /* Ensure table borders are visible */
         .table-bordered {
             border: 2px solid #ddd;
-            /* Light gray border */
         }
 
         .table-bordered th,
         .table-bordered td {
             border: 1px solid #ddd;
-            /* Light gray border for cells */
         }
 
-        /* Optional: Add a shadow effect to table rows */
         .table-hover tbody tr:hover {
             background-color: #f1f1f1;
         }
 
-        /* Optional: Add padding for better spacing */
         .table th,
         .table td {
             padding: 10px;

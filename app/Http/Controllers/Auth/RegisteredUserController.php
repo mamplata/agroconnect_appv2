@@ -17,7 +17,10 @@ class RegisteredUserController extends Controller
 
     public function index()
     {
-        $users = User::all();
+        $users = User::orderByRaw("role = 'admin' DESC") // Admins first
+            ->orderBy('created_at', 'desc') // Then by latest created
+            ->paginate(5); // Retrieve 5 users per page
+
         return view('admin.manage-users', compact('users'));
     }
 

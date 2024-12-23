@@ -23,6 +23,9 @@
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white font-bold">
                             <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('manage-crop')" :active="request()->routeIs('manage-crop')" class="text-white font-bold">
+                            <i class="fas fa-seedling me-2"></i>{{ __('Manage Crop') }}
+                        </x-nav-link>
                     @endif
                 </div>
 
@@ -96,6 +99,9 @@
             @elseif(auth()->user()->role === 'user')
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white font-bold">
                     <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('manage-crop')" :active="request()->routeIs('manage-crop')" class="text-white font-bold">
+                    <i class="fas fa-seedling me-2"></i>{{ __('Manage Crop') }}
                 </x-responsive-nav-link>
             @endif
         </div>
