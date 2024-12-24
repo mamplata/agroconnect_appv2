@@ -6,10 +6,22 @@
     </x-slot>
 
     <div class="container mt-5">
+        <!-- Search Form -->
+        <form method="GET" action="{{ route('admin.manage-users') }}" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" placeholder="Search by Name or Email"
+                    value="{{ old('search', $search) }}">
+                <button class="btn btn-dark" type="submit">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+
         <!-- Show success or error messages -->
         @if (session('status'))
             <div class="card mb-4">
-                <div class="card-body text-white {{ session('status_type') == 'success' ? 'bg-success' : 'bg-danger' }}">
+                <div
+                    class="card-body text-white {{ session('status_type') == 'success' ? 'bg-success' : 'bg-danger' }}">
                     <p class="mb-0">{{ session('status') }}</p>
                 </div>
             </div>
