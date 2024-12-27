@@ -14,16 +14,18 @@
                 <button class="btn btn-dark" type="submit">
                     <i class="fas fa-search"></i> Search
                 </button>
+                <button type="button" class="btn btn-secondary" onclick="resetSearch()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
             </div>
         </form>
 
         <!-- Show success or error messages -->
         @if (session('status'))
-            <div class="card mb-4">
-                <div
-                    class="card-body text-white {{ session('status_type') == 'success' ? 'bg-success' : 'bg-danger' }}">
-                    <p class="mb-0">{{ session('status') }}</p>
-                </div>
+            <div class="alert {{ session('status_type') == 'success' ? 'alert-success' : 'alert-danger' }} alert-dismissible fade show"
+                role="alert">
+                {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
@@ -124,6 +126,11 @@
                     }
                 })
                 .catch(error => console.error('Error:', error));
+        }
+
+        function resetSearch() {
+            const url = "{{ route('admin.manage-users') }}";
+            window.location.href = url; // Redirect to the same route without any query parameters
         }
     </script>
 
