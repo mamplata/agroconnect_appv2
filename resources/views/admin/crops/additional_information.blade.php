@@ -20,12 +20,8 @@
 
         <div class="mb-3">
             <!-- Back Button -->
-            <a href="{{ route('crops.index', $crop) }}" class="btn btn-secondary">
+            <a href="{{ route('admin.crops.index', $crop) }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back
-            </a>
-            <!-- Upload New File Button -->
-            <a href="{{ route('upload.create', $crop) }}" class="btn btn-primary ms-2">
-                <i class="fas fa-upload"></i> Upload New File
             </a>
         </div>
 
@@ -49,24 +45,12 @@
                             <td>{{ $info->id }}</td>
                             <td>{{ $fileData['originalName'] ?? 'N/A' }}</td>
                             <td>{{ $info->author->name ?? 'N/A' }}</td> <!-- Display the author's name -->
-                            <td class="d-flex">
+                            <td>
                                 <!-- View Button -->
                                 <a href="{{ asset('storage/' . $fileData['path']) }}" target="_blank"
-                                    class="btn btn-success btn-sm me-2">
+                                    class="btn btn-success btn-sm">
                                     <i class="fas fa-eye"></i> View
                                 </a>
-
-                                <!-- Delete Button -->
-                                <form
-                                    action="{{ route('upload.destroy', ['crop_id' => $crop->id, 'additionalInformation' => $info->id]) }}"
-                                    method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Are you sure you want to delete this file?')">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                     @endforeach

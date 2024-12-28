@@ -45,6 +45,14 @@ class RegisteredUserController extends Controller
         $user = User::find($userId);
 
         if ($user) {
+            // Check if the user is an admin
+            if ($user->role === 'admin') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot toggle status for admin user.',
+                ]);
+            }
+
             // Toggle status (1 = Active, 0 = Inactive)
             $user->status = !$user->status;
             $user->save();
@@ -60,7 +68,6 @@ class RegisteredUserController extends Controller
             'message' => 'User not found',
         ]);
     }
-
 
     /**
      * Handle an incoming registration request.

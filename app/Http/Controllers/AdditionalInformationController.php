@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdditionalInformation;
 use App\Models\Crop;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,10 @@ class AdditionalInformationController extends Controller
      */
     public function index($crop_id)
     {
-        // Fetch additional information related to the specific crop
-        $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)->get();
+        // Fetch additional information related to the specific crop, with author details
+        $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
+            ->with('author') // Eager load the user relationship
+            ->get();
 
         // Fetch the crop data if needed for display
         $crop = Crop::findOrFail($crop_id);
@@ -23,12 +26,25 @@ class AdditionalInformationController extends Controller
         return view('crops.additional_information', compact('crop', 'additionalInformation'));
     }
 
+    public function indexAdmin($crop_id)
+    {
+        // Fetch additional information related to the specific crop, with author details
+        $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
+            ->with('author') // Eager load the user relationship
+            ->get();
+
+        // Fetch the crop data if needed for display
+        $crop = Crop::findOrFail($crop_id);
+        session(['crop' => $crop]);
+        return view('admin.crops.additional_information', compact('crop', 'additionalInformation'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
-    public function create($crop_id)
+    public function create($crop)
     {
-        return view('crops.upload', compact('crop_id'));
+        return view('crops.upload', compact('crop'));
     }
 
     /**
@@ -50,6 +66,7 @@ class AdditionalInformationController extends Controller
             // Store the file details in the database
             AdditionalInformation::create([
                 'crop_id' => $request->crop_id, // Save crop_id to associate the file with a crop
+                'user_id' => auth()->id(), // Save the ID of the authenticated user as the author
                 'fileHolder' => json_encode([
                     'originalName' => $file->getClientOriginalName(),
                     'path' => $filePath,
@@ -71,7 +88,6 @@ class AdditionalInformationController extends Controller
             ]);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

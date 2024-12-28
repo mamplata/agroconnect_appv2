@@ -54,12 +54,15 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->status ? 'Active' : 'Inactive' }}</td>
                             <td>
-                                <button class="btn btn-sm {{ $user->status ? 'btn-success' : 'btn-danger' }}"
-                                    data-id="{{ $user->id }}" data-status="{{ $user->status }}"
-                                    onclick="toggleStatus(this)">
-                                    <i class="fas fa-toggle-{{ $user->status ? 'on' : 'off' }}"></i>
-                                    {{ $user->status ? 'Deactivate' : 'Activate' }}
-                                </button>
+                                @if ($user->role !== 'admin')
+                                    <!-- Check if the user's role is not admin -->
+                                    <button class="btn btn-sm {{ $user->status ? 'btn-success' : 'btn-danger' }}"
+                                        data-id="{{ $user->id }}" data-status="{{ $user->status }}"
+                                        onclick="toggleStatus(this)">
+                                        <i class="fas fa-toggle-{{ $user->status ? 'on' : 'off' }}"></i>
+                                        {{ $user->status ? 'Deactivate' : 'Activate' }}
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

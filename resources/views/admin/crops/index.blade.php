@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Manage Crops') }}
+            {{ __('View Crops') }}
         </h2>
     </x-slot>
 
     <div class="container mt-5">
         <!-- Search and Filter Form -->
-        <form method="GET" action="{{ route('crops.index') }}" class="mb-3">
+        <form method="GET" action="{{ route('admin.crops.index') }}" class="mb-3">
             <div class="row">
                 <div class="col-md-6">
                     <input type="text" class="form-control" name="search" placeholder="Search by Crop Name or Variety"
@@ -26,7 +26,7 @@
                     <button class="btn btn-dark" type="submit">
                         <i class="fas fa-search"></i> Search
                     </button>
-                    <a href="{{ route('crops.index') }}" class="btn btn-secondary">Reset</a>
+                    <a href="{{ route('admin.crops.index') }}" class="btn btn-secondary">Reset</a>
                 </div>
             </div>
         </form>
@@ -39,11 +39,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-
-        <!-- Link to Add Crop Page -->
-        <a href="{{ route('crops.create') }}" class="btn btn-dark mb-3">
-            <i class="fas fa-plus"></i> Add Crop
-        </a>
 
         <!-- Crop Table -->
         <div class="table-responsive">
@@ -75,20 +70,9 @@
                             <td>{{ $crop->author->name ?? 'Unknown' }}</td>
                             <td>{{ $crop->modifier->name ?? 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('upload.index', $crop) }}" class="btn btn-sm btn-secondary">
-                                    <i class="fas fa-upload"></i> Upload
+                                <a href="{{ route('admin.upload.index', $crop) }}" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-upload"></i> View Uploads
                                 </a>
-                                <a href="{{ route('crops.edit', $crop) }}" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form method="POST" action="{{ route('crops.destroy', $crop) }}" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('Are you sure you want to delete this crop?')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                     @endforeach

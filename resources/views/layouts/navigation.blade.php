@@ -19,6 +19,12 @@
                         <x-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')" class="text-white font-bold">
                             <i class="fas fa-users me-2"></i>{{ __('Manage Users') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.crops.index')" :active="request()->routeIs('admin.crops.index')" class="text-white font-bold">
+                            <i class="fas fa-seedling me-2"></i>{{ __('View Crop') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')" class="text-white font-bold">
+                            <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
+                        </x-nav-link>
                     @elseif(auth()->user()->role === 'user')
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white font-bold">
                             <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
@@ -106,9 +112,13 @@
                     class="text-white font-bold {{ request()->routeIs('admin.dashboard') ? 'active-link' : '' }}">
                     <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.manage-users')" :active="request()->routeIs('admin.manage-users')"
-                    class="text-white font-bold {{ request()->routeIs('admin.manage-users') ? 'active-link' : '' }}">
-                    <i class="fas fa-users me-2"></i>{{ __('Manage User') }}
+                <x-responsive-nav-link :href="route('admin.crops.index')" :active="request()->routeIs('admin.crops.index')"
+                    class="text-white font-bold {{ request()->routeIs('admin.crops.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-seedling me-2"></i>{{ __('View Crops') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')"
+                    class="text-white font-bold {{ request()->routeIs('admin.logs.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
                 </x-responsive-nav-link>
             @elseif(auth()->user()->role === 'user')
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')"

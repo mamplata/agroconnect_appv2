@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('crops', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id'); // Foreign key for user
+            $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for user
             $table->unsignedBigInteger('modified_by')->nullable(); // Foreign key for user who modified the record
             $table->string('cropName');
             $table->string('variety')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Set up foreign key constraint
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null');
         });
     }

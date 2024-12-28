@@ -35,4 +35,9 @@ class Crop extends Model
     {
         return $this->belongsTo(User::class, 'modified_by');
     }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

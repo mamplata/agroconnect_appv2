@@ -13,6 +13,7 @@ class CropController extends Controller
         $type = $request->input('type');
 
         $crops = Crop::query()
+            ->with('author') // Eager load the author relationship
             ->when($search, function ($query) use ($search) {
                 $query->where('cropName', 'like', "%$search%")
                     ->orWhere('variety', 'like', "%$search%");
@@ -20,10 +21,30 @@ class CropController extends Controller
             ->when($type, function ($query) use ($type) {
                 $query->where('type', $type);
             })
-            ->orderBy('created_at', 'desc') // Sort by latest created_at
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('crops.index', compact('crops', 'search', 'type'));
+    }
+
+    public function indexAdmin(Request $request)
+    {
+        $search = $request->input('search');
+        $type = $request->input('type');
+
+        $crops = Crop::query()
+            ->with('author') // Eager load the author relationship
+            ->when($search, function ($query) use ($search) {
+                $query->where('cropName', 'like', "%$search%")
+                    ->orWhere('variety', 'like', "%$search%");
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.crops.index', compact('crops', 'search', 'type'));
     }
 
     public function create()
@@ -77,46 +98,5 @@ class CropController extends Controller
         $crop->delete();
 
         return redirect()->route('crops.index')->with('status', 'Crop deleted successfully!')->with('status_type', 'success');
-    }
-
-    public function upload()
-    {
-        return view('crops.upload');
-    }
-
-    public function storeUpload(Request $request)
-    {
-        // Validate the file (max 10 MB)
-        $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,pdf,docx,txt|max:10240', // 10MB
-        ]);
-
-        try {
-            // Handle the file upload
-            $file = $request->file('file');
-            $filePath = $file->store('uploads', 'public');
-
-            // Store the file details in the database
-            Crop::create([
-                'fileHolder' => json_encode([
-                    'originalName' => $file->getClientOriginalName(),
-                    'path' => $filePath,
-                    'size' => $file->getSize(),
-                    'type' => $file->getMimeType(),
-                ]),
-            ]);
-
-            // Set success message
-            return redirect()->route('manage-crop')->with([
-                'status' => 'File uploaded successfully.',
-                'status_type' => 'success', // To distinguish between success and error messages
-            ]);
-        } catch (\Exception $e) {
-            // Set error message if something goes wrong (e.g., file storage issues)
-            return redirect()->route('manage-crop')->with([
-                'status' => 'Error uploading file. Please try again.',
-                'status_type' => 'danger', // Error message type
-            ]);
-        }
     }
 }

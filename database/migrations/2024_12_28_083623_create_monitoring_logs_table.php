@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('additional_information', function (Blueprint $table) {
+        Schema::create('monitoring_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('crop_id'); // Foreign key for crop
-            $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for user
-            $table->json('fileHolder')->nullable(); // Store file data as JSON
+            $table->unsignedBigInteger('user_id')->nullable(); // The user who performed the action
+            $table->string('action'); // e.g., Created, Updated, Deleted
+            $table->string('model'); // The model name (e.g., "Post", "Product")
+            $table->json('changes')->nullable(); // Store changes in JSON format
             $table->timestamps();
 
-            // Set up foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('crop_id')->references('id')->on('crops')->onDelete('cascade');
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('additional_information');
+        Schema::dropIfExists('monitoring_logs');
     }
 };
