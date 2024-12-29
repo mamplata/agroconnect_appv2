@@ -15,29 +15,32 @@ class AdditionalInformationController extends Controller
      */
     public function index($crop_id)
     {
-        // Fetch additional information related to the specific crop, with author details
+        // Fetch additional information related to the specific crop, with author details and pagination
         $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
             ->with('author') // Eager load the user relationship
-            ->get();
+            ->paginate(5);
 
         // Fetch the crop data if needed for display
         $crop = Crop::findOrFail($crop_id);
         session(['crop' => $crop]);
+
         return view('crops.additional_information', compact('crop', 'additionalInformation'));
     }
 
     public function indexAdmin($crop_id)
     {
-        // Fetch additional information related to the specific crop, with author details
+        // Fetch additional information related to the specific crop, with author details and pagination
         $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
             ->with('author') // Eager load the user relationship
-            ->get();
+            ->paginate(5);
 
         // Fetch the crop data if needed for display
         $crop = Crop::findOrFail($crop_id);
         session(['crop' => $crop]);
+
         return view('admin.crops.additional_information', compact('crop', 'additionalInformation'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -76,13 +79,13 @@ class AdditionalInformationController extends Controller
             ]);
 
             // Redirect back to the upload page for this crop
-            return redirect()->route('upload.index', ['crop_id' => $request->crop_id])->with([
+            return redirect()->route('upload.index', ['crop' => $request->crop_id])->with([
                 'status' => 'File uploaded successfully.',
                 'status_type' => 'success',
             ]);
         } catch (\Exception $e) {
             // Set error message if something goes wrong (e.g., file storage issues)
-            return redirect()->route('upload.index', ['crop_id' => $request->crop_id])->with([
+            return redirect()->route('upload.index', ['crop' => $request->crop_id])->with([
                 'status' => 'Error uploading file. Please try again.',
                 'status_type' => 'danger',
             ]);
@@ -113,7 +116,7 @@ class AdditionalInformationController extends Controller
         $additionalInformation->delete();
 
         // Redirect with success message
-        return redirect()->route('upload.index', ['crop_id' => $crop_id])
+        return redirect()->route('upload.index', ['crop' => $crop_id])
             ->with('status', 'File deleted successfully!')
             ->with('status_type', 'success');
     }

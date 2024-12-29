@@ -28,7 +28,7 @@
         @endif
 
         <!-- Add Crop Form -->
-        <form method="POST" action="{{ route('crops.store') }}">
+        <form method="POST" action="{{ route('crops.store') }}" enctype="multipart/form-data">
             @csrf
 
             <!-- Crop Name -->
@@ -89,6 +89,19 @@
                 <input type="number" class="form-control @error('growth_duration') is-invalid @enderror"
                     id="growth_duration" name="growth_duration" value="{{ old('growth_duration') }}">
                 @error('growth_duration')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Image Upload -->
+            <div class="mb-3">
+                <label for="img" class="form-label">Crop Image</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                    <input type="file" class="form-control @error('img') is-invalid @enderror" id="img"
+                        name="img" accept="image/*">
+                </div>
+                @error('img')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

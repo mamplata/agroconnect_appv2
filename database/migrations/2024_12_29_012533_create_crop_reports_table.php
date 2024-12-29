@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('crops', function (Blueprint $table) {
+        Schema::create('crop_reports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for user
             $table->unsignedBigInteger('modified_by')->nullable(); // Foreign key for user who modified the record
             $table->string('cropName');
-            $table->string('variety')->nullable();
+            $table->string('variety');
             $table->string('type');
-            $table->text('description')->nullable(); // Added description
-            $table->string('planting_period')->nullable(); // Added planting period
-            $table->integer('growth_duration')->nullable(); // Growth duration in days
-            $table->string('img')->nullable(); // Added image column
+            $table->decimal('areaPlanted', 8, 2); // Example: 12345.67 hectares
+            $table->decimal('productionVolume', 8, 2); // Example: 12345.67 metric tons
+            $table->decimal('yield', 8, 2); // Example: 12345.67 metric tons per hectare
+            $table->decimal('price', 10, 2); // Example: 1234567.89 currency units
+            $table->string('monthObserved', 7); // Store as string with format YYYY-MM
             $table->timestamps();
 
             // Set up foreign key constraint
@@ -35,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('crops');
+        Schema::dropIfExists('crop_reports');
     }
 };

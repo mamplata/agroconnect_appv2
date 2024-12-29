@@ -5,38 +5,45 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Crop extends Model
+class CropReport extends Model
 {
     use HasFactory;
 
     // Define fillable fields
     protected $fillable = [
         'user_id',
-        'img',
+        'modified_by',
         'cropName',
         'variety',
         'type',
-        'description',
-        'planting_period',
-        'growth_duration',
-        'modified_by'
+        'areaPlanted',
+        'productionVolume',
+        'yield',
+        'price',
+        'monthObserved'
     ];
 
     /**
      * Relationship with the User model
-     * A Crop belongs to a User
+     * A CropReport belongs to a User (creator)
      */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relationship with User model for 'modified_by'
+    /**
+     * Relationship with the User model
+     * A CropReport can be modified by a User
+     */
     public function modifier()
     {
         return $this->belongsTo(User::class, 'modified_by');
     }
 
+    /**
+     * Helper method to get the creator (author) of the crop report
+     */
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');

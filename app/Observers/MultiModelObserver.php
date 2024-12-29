@@ -44,7 +44,6 @@ class MultiModelObserver
             'action' => $action,
             'model' => get_class($model),
             'changes' => $changeDetails,  // Log detailed changes as a JSON string
-            'timestamp' => now(),  // Timestamp of the action
         ]);
 
         // Optionally log to Laravel log for debugging purposes
@@ -61,7 +60,6 @@ class MultiModelObserver
             'action' => $action,
             'model' => get_class($model),
             'changes' => $changeDetails,
-            'timestamp' => now(),  // Timestamp of the deletion
         ]);
 
         // Optionally log to Laravel log for debugging purposes

@@ -58,5 +58,8 @@
             </table>
         </div>
     </div>
+    <div class="pagination-wrapper">
+        {{ $additionalInformation->links() }}
+    </div>
 
 </x-app-layout>

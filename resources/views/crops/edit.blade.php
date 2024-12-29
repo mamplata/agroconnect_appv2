@@ -28,7 +28,7 @@
         @endif
 
         <!-- Edit Crop Form -->
-        <form method="POST" action="{{ route('crops.update', $crop) }}">
+        <form method="POST" action="{{ route('crops.update', $crop) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -55,8 +55,7 @@
                         <option value="" disabled>Select Type</option>
                         <option value="Rice" {{ old('type', $crop->type) == 'Rice' ? 'selected' : '' }}>Rice</option>
                         <option value="Vegetables" {{ old('type', $crop->type) == 'Vegetables' ? 'selected' : '' }}>
-                            Vegetables
-                        </option>
+                            Vegetables</option>
                         <option value="Fruits" {{ old('type', $crop->type) == 'Fruits' ? 'selected' : '' }}>Fruits
                         </option>
                     </select>
@@ -94,6 +93,26 @@
                     id="growth_duration" name="growth_duration"
                     value="{{ old('growth_duration', $crop->growth_duration) }}">
                 @error('growth_duration')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Image Upload (optional for editing) -->
+            <div class="mb-3">
+                <label for="img" class="form-label">Crop Image (Optional)</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                    <input type="file" class="form-control @error('img') is-invalid @enderror" id="img"
+                        name="img">
+                </div>
+                @if ($crop->img)
+                    <div class="mt-2">
+                        <p>Current Image:</p>
+                        <img src="{{ asset('storage/' . $crop->img) }}" alt="Crop Image" class="img-thumbnail"
+                            width="150">
+                    </div>
+                @endif
+                @error('img')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

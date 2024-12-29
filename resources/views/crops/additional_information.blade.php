@@ -5,15 +5,6 @@
         </h2>
     </x-slot>
 
-    <!-- Show success or error messages -->
-    @if (session('status'))
-        <div class="alert alert-{{ session('status_type') == 'success' ? 'success' : 'danger' }} alert-dismissible fade show mb-4"
-            role="alert">
-            <strong>{{ session('status_type') == 'success' ? 'Success!' : 'Error!' }}</strong> {{ session('status') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div class="container py-4">
         <h1 class="mb-4">Uploaded Files: <span class="text-primary font-bold">{{ $crop->cropName }}</span></h1>
         <!-- Display the crop name -->
@@ -28,6 +19,16 @@
                 <i class="fas fa-upload"></i> Upload New File
             </a>
         </div>
+
+        <!-- Show success or error messages -->
+        @if (session('status'))
+            <div class="alert alert-{{ session('status_type') == 'success' ? 'success' : 'danger' }} alert-dismissible fade show mb-4"
+                role="alert">
+                <strong>{{ session('status_type') == 'success' ? 'Success!' : 'Error!' }}</strong>
+                {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -73,6 +74,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="pagination-wrapper">
+        {{ $additionalInformation->links() }}
     </div>
 
 </x-app-layout>

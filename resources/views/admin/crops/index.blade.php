@@ -8,25 +8,30 @@
     <div class="container mt-5">
         <!-- Search and Filter Form -->
         <form method="GET" action="{{ route('admin.crops.index') }}" class="mb-3">
-            <div class="row">
-                <div class="col-md-6">
-                    <input type="text" class="form-control" name="search" placeholder="Search by Crop Name or Variety"
-                        value="{{ old('search', $search) }}">
-                </div>
-                <div class="col-md-3">
-                    <select name="type" class="form-control">
-                        <option value="">Filter by Type</option>
-                        <option value="Rice" {{ old('type', $type) == 'Rice' ? 'selected' : '' }}>Rice</option>
-                        <option value="Vegetables" {{ old('type', $type) == 'Vegetables' ? 'selected' : '' }}>Vegetables
-                        </option>
-                        <option value="Fruits" {{ old('type', $type) == 'Fruits' ? 'selected' : '' }}>Fruits</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-dark" type="submit">
-                        <i class="fas fa-search"></i> Search
-                    </button>
-                    <a href="{{ route('admin.crops.index') }}" class="btn btn-secondary">Reset</a>
+            <div class="input-group">
+                <div class="row w-100">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="search"
+                            placeholder="Search by Crop Name or Variety" value="{{ old('search', $search) }}">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="type" class="form-control">
+                            <option value="">Filter by Type</option>
+                            <option value="Rice" {{ old('type', $type) == 'Rice' ? 'selected' : '' }}>Rice</option>
+                            <option value="Vegetables" {{ old('type', $type) == 'Vegetables' ? 'selected' : '' }}>
+                                Vegetables</option>
+                            <option value="Fruits" {{ old('type', $type) == 'Fruits' ? 'selected' : '' }}>Fruits
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex">
+                        <button class="btn btn-dark me-2" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="{{ route('admin.crops.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </a>
+                    </div>
                 </div>
             </div>
         </form>
@@ -46,6 +51,7 @@
                 <thead class="bg-success text-white">
                     <tr>
                         <th>#</th>
+                        <th>Image</th>
                         <th>Crop Name</th>
                         <th>Variety</th>
                         <th>Type</th>
@@ -61,6 +67,14 @@
                     @foreach ($crops as $index => $crop)
                         <tr>
                             <td>{{ $crops->firstItem() + $index }}</td>
+                            <td>
+                                @if ($crop->img)
+                                    <img src="{{ asset('storage/' . $crop->img) }}" alt="{{ $crop->cropName }} Image"
+                                        width="50">
+                                @else
+                                    No Image
+                                @endif
+                            </td>
                             <td>{{ $crop->cropName }}</td>
                             <td>{{ $crop->variety }}</td>
                             <td>{{ $crop->type }}</td>

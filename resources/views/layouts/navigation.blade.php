@@ -20,7 +20,10 @@
                             <i class="fas fa-users me-2"></i>{{ __('Manage Users') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.crops.index')" :active="request()->routeIs('admin.crops.index')" class="text-white font-bold">
-                            <i class="fas fa-seedling me-2"></i>{{ __('View Crop') }}
+                            <i class="fas fa-seedling me-2"></i>{{ __('View Crops') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.crop_reports.index')" :active="request()->routeIs('admin.crop_reports.index')" class="text-white font-bold">
+                            <i class="fas fa-clipboard-list me-2"></i>{{ __('View Crop Reports') }}
                         </x-nav-link>
                         <x-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')" class="text-white font-bold">
                             <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
@@ -30,7 +33,10 @@
                             <i class="fas fa-tachometer-alt me-2"></i>{{ __('Dashboard') }}
                         </x-nav-link>
                         <x-nav-link :href="route('crops.index')" :active="request()->routeIs('crops.index')" class="text-white font-bold">
-                            <i class="fas fa-seedling me-2"></i>{{ __('Manage Crop') }}
+                            <i class="fas fa-seedling me-2"></i>{{ __('Manage Crops') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('crop_reports.index')" :active="request()->routeIs('crop_reports.index')" class="text-white font-bold">
+                            <i class="fas fa-clipboard-list me-2"></i>{{ __('Manage Crop Reports') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -116,6 +122,10 @@
                     class="text-white font-bold {{ request()->routeIs('admin.crops.index') ? 'active-link' : '' }}">
                     <i class="fas fa-seedling me-2"></i>{{ __('View Crops') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.crop_reports.index')" :active="request()->routeIs('admin.crop_reports.index')"
+                    class="text-white font-bold {{ request()->routeIs('admin.crop_reports.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-clipboard-list me-2"></i>{{ __('View Crop Reports') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')"
                     class="text-white font-bold {{ request()->routeIs('admin.logs.index') ? 'active-link' : '' }}">
                     <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
@@ -127,7 +137,11 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('crops.index')" :active="request()->routeIs('crops.index')"
                     class="text-white font-bold {{ request()->routeIs('crops.index') ? 'active-link' : '' }}">
-                    <i class="fas fa-seedling me-2"></i>{{ __('Manage Crop') }}
+                    <i class="fas fa-seedling me-2"></i>{{ __('Manage Crops') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('crop_reports.index')" :active="request()->routeIs('crop_reports.index')"
+                    class="text-white font-bold {{ request()->routeIs('crop_reports.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-clipboard-list me-2"></i>{{ __('Manage Crop Reports') }}
                 </x-responsive-nav-link>
             @endif
         </div>

@@ -42,7 +42,7 @@
                     </div>
 
                     <!-- Hidden field to store crop ID -->
-                    <input type="hidden" name="crop_id" value="{{ $crop_id }}">
+                    <input type="hidden" name="crop_id" value="{{ $crop }}">
 
                     <button type="submit" class="btn btn-primary mt-3 w-100">
                         <i class="fas fa-cloud-upload-alt"></i> Upload
