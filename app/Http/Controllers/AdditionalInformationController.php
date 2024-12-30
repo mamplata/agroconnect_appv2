@@ -15,9 +15,10 @@ class AdditionalInformationController extends Controller
      */
     public function index($crop_id)
     {
-        // Fetch additional information related to the specific crop, with author details and pagination
+        // Fetch additional information related to the specific crop, with author details, pagination, and sorted by created_at
         $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
             ->with('author') // Eager load the user relationship
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
             ->paginate(5);
 
         // Fetch the crop data if needed for display
@@ -29,9 +30,10 @@ class AdditionalInformationController extends Controller
 
     public function indexAdmin($crop_id)
     {
-        // Fetch additional information related to the specific crop, with author details and pagination
+        // Fetch additional information related to the specific crop, with author details, pagination, and sorted by created_at
         $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
             ->with('author') // Eager load the user relationship
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
             ->paginate(5);
 
         // Fetch the crop data if needed for display

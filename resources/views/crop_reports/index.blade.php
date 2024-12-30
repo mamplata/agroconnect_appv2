@@ -108,20 +108,25 @@
                             <td>{{ $cropReport->modifier->name ?? 'N/A' }}</td>
                             <td>
                                 <div class="input-group">
-                                    <a href="{{ route('crop_reports.edit', $cropReport) }}"
-                                        class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <form method="POST" action="{{ route('crop_reports.destroy', $cropReport) }}"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this crop report?')">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </form>
+                                    <div class="w-100 mb-2">
+                                        <a href="{{ route('crop_reports.edit', $cropReport) }}"
+                                            class="btn btn-sm btn-primary w-100">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    </div>
+                                    <div class="w-100">
+                                        <form method="POST" action="{{ route('crop_reports.destroy', $cropReport) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger w-100"
+                                                onclick="return confirm('Are you sure you want to delete this crop report?')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
+
                             </td>
 
                         </tr>

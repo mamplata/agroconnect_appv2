@@ -132,7 +132,7 @@ body {
 }
 
 main {
-    max-width: 1500px; /* Constrains the width */
+    max-width: 2000px; /* Constrains the width */
     margin: 0 auto; /* Centers the content */
 }
 

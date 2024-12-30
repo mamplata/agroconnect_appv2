@@ -91,21 +91,31 @@
                             <td>{{ $crop->modifier->name ?? 'N/A' }}</td>
                             <td>
                                 <div class="input-group">
-                                    <a href="{{ route('upload.index', $crop) }}" class="btn btn-sm btn-secondary">
-                                        <i class="fas fa-upload"></i> Upload
-                                    </a>
-                                    <a href="{{ route('crops.edit', $crop) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                    <form method="POST" action="{{ route('crops.destroy', $crop) }}" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this crop?')">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
-                                    </form>
+                                    <div class="w-100 mb-2">
+                                        <a href="{{ route('upload.index', $crop) }}"
+                                            class="btn btn-sm btn-secondary w-100">
+                                            <i class="fas fa-upload"></i> Upload
+                                        </a>
+                                    </div>
+                                    <div class="w-100 mb-2">
+                                        <a href="{{ route('crops.edit', $crop) }}"
+                                            class="btn btn-sm btn-primary w-100">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    </div>
+                                    <div class="w-100">
+                                        <form method="POST" action="{{ route('crops.destroy', $crop) }}"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger w-100"
+                                                onclick="return confirm('Are you sure you want to delete this crop?')">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
+
                             </td>
                         </tr>
                     @endforeach
