@@ -1,0 +1,167 @@
+body {
+    font-family: 'Figtree', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.hero {
+    position: relative;
+    background: url('../images/home_bg.webp') no-repeat center center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background-size: cover;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black overlay */
+    z-index: 1;
+}
+
+.hero h1,
+.hero p,
+.hero a {
+    position: relative;
+    z-index: 2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    /* Adds a dark shadow to the text */
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.hero p {
+    font-size: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero p {
+        font-size: 1.5rem;
+    }
+}
+
+.features {
+    padding: 3rem 1rem;
+}
+
+.features .icon {
+    font-size: 2.5rem;
+    color: #28a745;
+}
+
+@media (min-width: 768px) {
+    .features .icon {
+        font-size: 3rem;
+    }
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+.footer a {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Softer hover effect for menu items */
+.btn-outline-light {
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    color: #6dbf53 !important; /* Lighter green for hover */
+    background-color: #e0f7e0 !important; /* Light background color to complement the hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Active link styling */
+.active {
+    color: #6dbf53 !important; /* Lighter green for hover */
+    background-color: #e0f7e0 !important; /* Light background color to complement the hover */
+    font-weight: bold;
+}
+
+/* Modify the background color for readability */
+.bg-success {
+    background-color: #3a6f40 !important; /* Darker green for softer look */
+}
+
+/* Mobile Navbar (Links Style) */
+.link-light {
+    text-decoration: none; /* Removes underline */
+    color: #ffffff; /* Ensures the text color matches the link-light style */
+    font-weight: 500; /* Slightly bolder text for better visibility */
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+    text-align: center;
+}
+
+.link-light:hover {
+    color: #6dbf53 !important; /* Lighter green for hover */
+    background-color: #e0f7e0 !important; /* Light background color to complement the hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.link-light.active {
+    color: #6dbf53 !important; /* Lighter green for hover */
+    background-color: #e0f7e0 !important; /* Light background color to complement the hover */
+}
+
+main {
+    max-width: 1500px; /* Constrains the width */
+    margin: 0 auto; /* Centers the content */
+}
+
+header {
+    max-width: 1500px; /* Constrains the width */
+    margin: 0 auto; /* Centers the content */
+}
+
+/* Custom Toggler Button */
+.custom-toggler {
+    border: none; /* Remove border */
+    background: transparent; /* Make the background transparent */
+    padding: 10px 15px; /* Add padding for better click area */
+}
+
+/* Custom FontAwesome Icon */
+.custom-icon {
+    font-size: 20px;
+    color: #008000; /* Set the icon color (green in this case) */
+    transition: color 0.3s ease; /* Add transition for smooth color change */
+}
+
+/* Hover effect for the icon */
+.custom-toggler:hover .custom-icon {
+    color: #FFD700; /* Change icon color on hover (gold in this case) */
+}
+
+/* Focus effect (for accessibility) */
+.custom-toggler:focus .custom-icon {
+    outline: none; /* Remove outline on focus */
+    color: #FFD700; /* Change icon color on focus */
+}
