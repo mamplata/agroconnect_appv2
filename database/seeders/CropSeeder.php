@@ -12,14 +12,40 @@ class CropSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Inserting dummy data
-        foreach (range(1, 10) as $index) {  // Change 10 to the desired number of records
+        $cropData = [
+            ['cropName' => 'Squash', 'variety' => 'Suprema'],
+            ['cropName' => 'Rice', 'variety' => 'N/A'],
+            ['cropName' => 'Upo', 'variety' => 'Mayumi'],
+            ['cropName' => 'Watermelon', 'variety' => 'Sugarbaby Max'],
+            ['cropName' => 'Eggplant', 'variety' => 'Fortuner'],
+            ['cropName' => 'Tomato', 'variety' => 'Diamante Max'],
+            ['cropName' => 'Ampalaya', 'variety' => 'Glaxy'],
+            ['cropName' => 'Watermelon', 'variety' => 'Jaguar'],
+            ['cropName' => 'Upo', 'variety' => 'Tambuli'],
+            ['cropName' => 'Eggplant', 'variety' => 'Calixto'],
+            ['cropName' => 'Red Hot Pepper', 'variety' => 'Superheat'],
+        ];
+
+        // Add 'type' to each crop entry
+        foreach ($cropData as &$data) {
+            if ($data['cropName'] === 'Rice') {
+                $data['type'] = 'Rice';
+            } elseif ($data['cropName'] === 'Watermelon') {
+                $data['type'] = 'Fruit';
+            } else {
+                $data['type'] = 'Vegetable';
+            }
+        }
+        unset($data); // Unset reference to avoid issues
+
+
+        foreach ($cropData as $data) {
             Crop::create([
                 'user_id' => 2,
                 'img' => $faker->imageUrl(),
-                'cropName' => $faker->word,
-                'variety' => $faker->word,
-                'type' => $faker->randomElement(['Vegetable', 'Rice', 'Fruit']),
+                'cropName' => $data['cropName'],
+                'variety' => $data['variety'],
+                'type' => $data['type'],
                 'description' => $faker->sentence,
                 'planting_period' => $faker->monthName,
                 'growth_duration' => $faker->numberBetween(60, 180),  // Days

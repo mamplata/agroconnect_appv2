@@ -12,14 +12,42 @@ class CropReportSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Inserting dummy data
-        foreach (range(1, 10) as $index) {  // Change 10 to the desired number of records
+        $cropData = [
+            ['cropName' => 'Squash', 'variety' => 'Suprema'],
+            ['cropName' => 'Rice', 'variety' => 'N/A'],
+            ['cropName' => 'Upo', 'variety' => 'Mayumi'],
+            ['cropName' => 'Watermelon', 'variety' => 'Sugarbaby Max'],
+            ['cropName' => 'Eggplant', 'variety' => 'Fortuner'],
+            ['cropName' => 'Tomato', 'variety' => 'Diamante Max'],
+            ['cropName' => 'Ampalaya', 'variety' => 'Glaxy'],
+            ['cropName' => 'Watermelon', 'variety' => 'Jaguar'],
+            ['cropName' => 'Upo', 'variety' => 'Tambuli'],
+            ['cropName' => 'Eggplant', 'variety' => 'Calixto'],
+            ['cropName' => 'Red Hot Pepper', 'variety' => 'Superheat'],
+        ];
+
+        // Add 'type' to each crop entry
+        foreach ($cropData as &$data) {
+            if ($data['cropName'] === 'Rice') {
+                $data['type'] = 'Rice';
+            } elseif ($data['cropName'] === 'Watermelon') {
+                $data['type'] = 'Fruit';
+            } else {
+                $data['type'] = 'Vegetable';
+            }
+        }
+        unset($data); // Unset reference to avoid issues
+
+        // Generate multiple CropReport records with random picks
+        for ($i = 0; $i < 10; $i++) {
+            $randomCrop = $cropData[array_rand($cropData)]; // Pick a random crop from $cropData
+
             CropReport::create([
                 'user_id' => 2,
                 'modified_by' => 2,
-                'cropName' => $faker->word,
-                'variety' => $faker->word,
-                'type' => $faker->randomElement(['Vegetable', 'Rice', 'Fruit']),
+                'cropName' => $randomCrop['cropName'],
+                'variety' => $randomCrop['variety'],
+                'type' => $randomCrop['type'],
                 'areaPlanted' => $faker->randomFloat(2, 1, 100),  // In hectares
                 'productionVolume' => $faker->randomFloat(2, 500, 5000),  // In kilograms
                 'yield' => $faker->randomFloat(2, 1, 10),  // Yield per hectare

@@ -24,8 +24,8 @@
                     class="text-light me-3 btn btn-outline-light {{ request()->is('/') ? 'active' : '' }}">Home</a>
                 <a href="{{ url('/trends') }}"
                     class="text-light me-3 btn btn-outline-light {{ request()->is('trends') ? 'active' : '' }}">Trends</a>
-                <a href="{{ url('/weather_forecast') }}"
-                    class="text-light me-3 btn btn-outline-light {{ request()->is('weather_forecast') ? 'active' : '' }}">Weather
+                <a href="{{ url('/weather_forecasts') }}"
+                    class="text-light me-3 btn btn-outline-light {{ request()->is('weather_forecasts') ? 'active' : '' }}">Weather
                     Forecast</a>
                 @auth
                     <a href="{{ url('/dashboard') }}"
@@ -53,8 +53,8 @@
             class="text-light d-block py-2 link-light {{ request()->is('/') ? 'active' : '' }}">Home</a>
         <a href="{{ url('/trends') }}"
             class="text-light d-block py-2 link-light {{ request()->is('trends') ? 'active' : '' }}">Trends</a>
-        <a href="{{ url('/weather_forecast') }}"
-            class="text-light d-block py-2 link-light {{ request()->is('weather_forecast') ? 'active' : '' }}">Weather
+        <a href="{{ url('/weather_forecasts') }}"
+            class="text-light d-block py-2 link-light {{ request()->is('weather_forecasts') ? 'active' : '' }}">Weather
             Forecast</a>
         @auth
             <a href="{{ url('/dashboard') }}"

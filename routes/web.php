@@ -6,12 +6,30 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CropController;
 use App\Http\Controllers\CropReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Support\Facades\Route;
 
+//HOME
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+//TRENDS
+Route::get('/trends', function () {
+    return view('trends.index');
+})->name('trends.index');
+Route::get('/price', function () {
+    return view('trends.price');
+})->name('trends.price');
+Route::get('/stats', function () {
+    return view('trends.stats');
+})->name('trends.stats');
+Route::get('/info', function () {
+    return view('trends.info');
+})->name('trends.info');
+
+//WEATHER FORECAST
+Route::get('/weather_forecasts', [WeatherForecastController::class, 'index'])->name('weather_forecasts.index');
 
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {

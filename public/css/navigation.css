@@ -1,3 +1,6 @@
+* {
+    box-sizing: border-box;
+}
 body {
     font-family: 'Figtree', sans-serif;
     background-color: #f9f9f9;
@@ -131,11 +134,6 @@ body {
     background-color: #e0f7e0 !important; /* Light background color to complement the hover */
 }
 
-main {
-    max-width: 2000px; /* Constrains the width */
-    margin: 0 auto; /* Centers the content */
-}
-
 header {
     max-width: 1500px; /* Constrains the width */
     margin: 0 auto; /* Centers the content */
@@ -164,4 +162,17 @@ header {
 .custom-toggler:focus .custom-icon {
     outline: none; /* Remove outline on focus */
     color: #FFD700; /* Change icon color on focus */
+}
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+footer{
+    margin-top: auto;
 }
