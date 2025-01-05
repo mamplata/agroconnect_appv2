@@ -37,10 +37,10 @@ class CropReportController extends Controller
             ->orderBy('monthObserved'); // Sort by monthObserved for easier comparison
 
         // Get the price data
-        $prices = $query->get();
+        $prices = $query->paginate(5); // Add pagination here
 
         // Transform to calculate status and format the date before applying sorting or filtering
-        $prices->transform(function ($item, $key) use ($prices) {
+        $prices->getCollection()->transform(function ($item, $key) use ($prices) {
             $previousPrice = $key > 0 ? $prices[$key - 1]->price : null;
 
             if ($previousPrice) {
@@ -100,7 +100,6 @@ class CropReportController extends Controller
                 return true;
             });
         }
-
 
         // Check if sorting direction for price is provided and apply it
         if ($request->has('price') && in_array($request->price, ['asc', 'desc'])) {

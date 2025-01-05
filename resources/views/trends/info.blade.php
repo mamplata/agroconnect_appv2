@@ -8,74 +8,80 @@
     <title>AgroConnect Cabuyao</title>
 </head>
 
-<body>
+<body class="bg-light">
+
     @include('header')
+
     <main class="container my-5">
-        <h2 class="text-center mb-5">Squash Information</h2>
+        <h2 class="text-center mb-4">{{ $crop->cropName }} - {{ $crop->variety ?? '' }}</h2>
 
         <!-- Squash Information Card -->
-        <div class="card mb-5 shadow-sm">
+        <div class="card mb-4 shadow-lg">
             <div class="card-header bg-primary text-white">
-                <h4 class="card-title">Squash Overview</h4>
+                <h4 class="card-title mb-0">{{ $crop->cropName }} - {{ $crop->variety ?? '' }} Overview</h4>
             </div>
             <div class="card-body">
-                <h5>Description</h5>
-                <p>
-                    Squash (Cucurbita spp.) is a member of the gourd family and is widely cultivated for its edible
-                    fruits, which come in various shapes and sizes. It is commonly used in culinary dishes, especially
-                    in
-                    soups and stews. Squash thrives in warm climates and requires full sunlight for optimal growth.
-                </p>
+                <h5 class="card-title">Description</h5>
+                <p class="card-text">{{ $crop->description ?? 'No description available.' }}</p>
 
-                <h5>Planting Period</h5>
-                <p>
-                    The ideal planting period for squash is during the wet season, typically from June to August. It is
-                    best
-                    to plant squash when the risk of frost is minimal, and the soil temperature is between 21°C and
-                    30°C.
-                </p>
+                <h5 class="card-title mt-3">Planting Period</h5>
+                <p class="card-text">{{ $crop->planting_period ?? 'No planting period available.' }}</p>
 
-                <h5>Growth Duration</h5>
-                <p>
-                    Squash typically takes 60 to 100 days to mature, depending on the variety. It starts with the
-                    germination
-                    phase, followed by the vegetative growth phase, flowering, and finally fruiting. The growth period
-                    can vary
-                    based on environmental conditions such as temperature and water availability.
-                </p>
+                <h5 class="card-title mt-3">Growth Duration</h5>
+                <p class="card-text">{{ $crop->growth_duration ?? 'No growth duration available.' }}</p>
             </div>
         </div>
 
         <!-- Additional Information Section -->
-        <div class="card shadow-sm">
+        <div class="card shadow-lg">
             <div class="card-header bg-secondary text-white">
-                <h4 class="card-title">Additional Information</h4>
+                <h4 class="card-title mb-0">Additional Information</h4>
             </div>
             <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-link">Squash Planting Guide (PDF)</a>
-                        <span class="badge bg-info text-white">Download</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-link">Squash Pest and Disease Management (PDF)</a>
-                        <span class="badge bg-info text-white">Download</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-link">Squash Market Trends (External Link)</a>
-                        <span class="badge bg-info text-white">Link</span>
-                    </li>
-                </ul>
+                @if ($additionalInformation->isEmpty())
+                    <p class="text-center text-muted">No additional information available.</p>
+                @else
+                    <ul class="list-group list-group-flush">
+                        @foreach ($additionalInformation as $info)
+                            @php
+                                $fileData = json_decode($info->fileHolder, true);
+                            @endphp
+                            <li class="list-group-item p-0 mb-3">
+                                <!-- Card for each file -->
+                                <div class="card shadow-sm border-light rounded">
+                                    <div class="card-body d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-column">
+                                            <a href="{{ asset('storage/' . $fileData['path']) }}"
+                                                class="text-decoration-none h5 mb-2" target="_blank">
+                                                {{ $fileData['originalName'] ?? 'File' }}
+                                            </a>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $fileData['path']) }}"
+                                            class="btn btn-dark text-white rounded-pill px-4 py-2" target="_blank">
+                                            View
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                <!-- Pagination -->
+                <div class="mt-4">
+                    {{ $additionalInformation->links() }}
+                </div>
             </div>
         </div>
 
         <!-- Back Button -->
-        <div class="text-center mt-4">
-            <a href="/trends" class="btn btn-primary btn-lg">Back </a>
+        <div class="text-center mt-5">
+            <a href="/trends" class="btn btn-primary btn-lg">Back</a>
         </div>
     </main>
 
     @include('footer')
+
 </body>
 
 </html>

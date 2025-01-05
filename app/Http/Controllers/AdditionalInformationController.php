@@ -10,6 +10,22 @@ use Illuminate\Http\Request;
 
 class AdditionalInformationController extends Controller
 {
+
+    public function showInformation($crop_id)
+    {
+        // Fetch crop data for Squash (assuming you have a method to get the crop by ID)
+        $crop = Crop::findOrFail($crop_id);
+
+        // Fetch additional information related to the Squash crop, with author details, pagination, and sorted by created_at
+        $additionalInformation = AdditionalInformation::where('crop_id', $crop_id)
+            ->with('author') // Eager load the author relationship
+            ->orderBy('created_at', 'desc') // Sort by created_at in descending order
+            ->paginate(5);
+
+        // Return the view with the crop and additional information
+        return view('trends.info', compact('crop', 'additionalInformation'));
+    }
+
     /**
      * Display a listing of the resource.
      */

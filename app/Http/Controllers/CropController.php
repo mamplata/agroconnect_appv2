@@ -40,8 +40,6 @@ class CropController extends Controller
         return view('trends.index', compact('crops', 'search', 'type'));
     }
 
-
-
     public function index(Request $request)
     {
         $search = $request->input('search');

@@ -93,7 +93,8 @@
                                     <a href="/stats" class="btn btn-success btn-sm mb-2 me-1 d-block w-100">
                                         <i class="fas fa-chart-line"></i> Stats
                                     </a>
-                                    <a href="/info" class="btn btn-info btn-sm d-block w-100">
+                                    <a href="{{ route('trends.info', $crop) }}"
+                                        class="btn btn-info btn-sm d-block w-100">
                                         <i class="fas fa-info-circle"></i> Info
                                     </a>
                                 </td>

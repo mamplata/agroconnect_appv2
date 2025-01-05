@@ -72,6 +72,11 @@
             </table>
         </div>
 
+        <!-- Pagination Links (Centered) -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $prices->links() }} <!-- Pagination links -->
+        </div>
+
         <div class="text-center mt-4">
             <a href="/trends" class="btn btn-primary">Back</a>
         </div>

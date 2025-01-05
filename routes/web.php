@@ -7,6 +7,7 @@ use App\Http\Controllers\CropController;
 use App\Http\Controllers\CropReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WeatherForecastController;
+use App\Models\AdditionalInformation;
 use App\Models\CropReport;
 use Illuminate\Support\Facades\Route;
 
@@ -17,13 +18,11 @@ Route::get('/', function () {
 
 //TRENDS
 Route::get('/trends',  [CropController::class, 'trends'])->name('trends.index');
-Route::get('/price/{cropName}/{variety}', [CropReportController::class, 'trendsShow'])->name('trends.price');
+Route::get('trends/price/{cropName}/{variety}', [CropReportController::class, 'trendsShow'])->name('trends.price');
 Route::get('/stats', function () {
     return view('trends.stats');
 })->name('trends.stats');
-Route::get('/info', function () {
-    return view('trends.info');
-})->name('trends.info');
+Route::get('trends/info/{crop_id}', [AdditionalInformationController::class, 'showInformation'])->name('trends.info');
 
 //WEATHER FORECAST
 Route::get('/weather_forecasts', [WeatherForecastController::class, 'index'])->name('weather_forecasts.index');
