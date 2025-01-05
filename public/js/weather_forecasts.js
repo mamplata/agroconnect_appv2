@@ -112,38 +112,43 @@ document.addEventListener("DOMContentLoaded", function () {
             datasets: [
                 {
                     label: "Max Temperature (°C)",
-                    data: maxTemperatureData,
+                    data: maxTemperatureData, // Array of maximum temperature values
                     borderColor: "#ff6f61",
                     fill: false,
                     tension: 0.1,
+                    yAxisID: "y1",
                 },
                 {
                     label: "Min Temperature (°C)",
-                    data: minTemperatureData,
+                    data: minTemperatureData, // Array of minimum temperature values
                     borderColor: "#61a0ff",
                     fill: false,
                     tension: 0.1,
+                    yAxisID: "y1",
                 },
                 {
                     label: "Average Humidity (%)",
-                    data: humidityData,
+                    data: humidityData, // Array of average humidity values
                     borderColor: "#61ffab",
                     fill: false,
                     tension: 0.1,
+                    yAxisID: "y2",
                 },
                 {
                     label: "Rain Probability (%)",
-                    data: rainProbabilityData,
+                    data: rainProbabilityData, // Array of rain probability values
                     borderColor: "#ffab61",
                     fill: false,
                     tension: 0.1,
+                    yAxisID: "y3",
                 },
                 {
                     label: "Wind Speed (km/h)",
-                    data: windSpeedData,
+                    data: windSpeedData, // Array of wind speed values
                     borderColor: "#ab61ff",
                     fill: false,
                     tension: 0.1,
+                    yAxisID: "y4",
                 },
             ],
         },
@@ -153,6 +158,74 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: {
                 legend: {
                     position: "top",
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function (tooltipItem) {
+                            return tooltipItem[0].label;
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: "Date",
+                    },
+                },
+                y1: {
+                    type: "linear",
+                    position: "left",
+                    title: {
+                        display: false,
+                        text: "Temperature (°C)",
+                    },
+                    ticks: {
+                        display: false,
+                    },
+                },
+                y2: {
+                    type: "linear",
+                    position: "right",
+                    title: {
+                        display: false,
+                        text: "Humidity (%)",
+                    },
+                    ticks: {
+                        display: false,
+                    },
+                    grid: {
+                        drawOnChartArea: false, // Avoid overlapping grid lines
+                    },
+                },
+                y3: {
+                    type: "linear",
+                    position: "right",
+                    title: {
+                        display: false,
+                        text: "Rain Probability (%)",
+                    },
+                    ticks: {
+                        display: false,
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                },
+                y4: {
+                    type: "linear",
+                    position: "right",
+                    title: {
+                        display: false,
+                        text: "Wind Speed (km/h)",
+                    },
+                    ticks: {
+                        display: false,
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
                 },
             },
         },

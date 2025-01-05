@@ -132,23 +132,6 @@ button:hover {
     opacity: 0.8;
 }
 
-
-
-To design the checkbox inputs without using Bootstrap, you can apply custom CSS to style the checkboxes and labels in a clean and modern way. Here's how you can achieve a neat design for the checkbox controls:
-
-HTML Structure (unchanged)
-html
-Copy code
-<div id="datasetControls" class="mt-2">
-    <label><input type="checkbox" data-dataset="0" checked> Max Temperature</label>
-    <label><input type="checkbox" data-dataset="1" checked> Min Temperature</label>
-    <label><input type="checkbox" data-dataset="2" checked> Humidity</label>
-    <label><input type="checkbox" data-dataset="3" checked> Rain Probability</label>
-    <label><input type="checkbox" data-dataset="4" checked> Wind Speed</label>
-</div>
-CSS Styling (No Bootstrap)
-css
-Copy code
 #datasetControls {
     display: flex;
     flex-wrap: wrap;
