@@ -29,6 +29,94 @@ class CropReportController extends Controller
         return view('crop_reports.index', compact('cropReports', 'search', 'type', 'sortBy', 'sortOrder'));
     }
 
+    public function trendsShow(Request $request, $cropName, $variety)
+    {
+        // Start the query to retrieve the price data for the specified crop name and variety
+        $query = CropReport::where('cropName', $cropName)
+            ->where('variety', $variety)
+            ->orderBy('monthObserved'); // Sort by monthObserved for easier comparison
+
+        // Get the price data
+        $prices = $query->get();
+
+        // Transform to calculate status and format the date before applying sorting or filtering
+        $prices->transform(function ($item, $key) use ($prices) {
+            $previousPrice = $key > 0 ? $prices[$key - 1]->price : null;
+
+            if ($previousPrice) {
+                // Compare current price with the previous one
+                if ($item->price > $previousPrice) {
+                    $item->status = 'Up';
+                    $item->statusIcon = 'fas fa-arrow-up text-success'; // FontAwesome icon for up
+                } elseif ($item->price < $previousPrice) {
+                    $item->status = 'Down';
+                    $item->statusIcon = 'fas fa-arrow-down text-danger'; // FontAwesome icon for down
+                } else {
+                    $item->status = 'No Change';
+                    $item->statusIcon = 'fas fa-minus text-secondary'; // FontAwesome icon for no change
+                }
+            } else {
+                // For the first price entry, assume 'No Change' or 'Up' as initial state
+                $item->status = 'No Change';
+                $item->statusIcon = 'fas fa-minus text-secondary';
+            }
+
+            // Add formatted date
+            $item->date = \Carbon\Carbon::parse($item->monthObserved)->format('F Y'); // Format the date as "January 2024"
+
+            return $item;
+        });
+
+        // Apply the date filter using min, max, or between logic
+        if ($request->has('start_date') || $request->has('end_date')) {
+            // Ensure date format is 'F Y' and parse correctly, but only if provided
+            $startDate = null;
+            if ($request->has('start_date') && $request->start_date) {
+                $startDate = \Carbon\Carbon::parse($request->start_date)->startOfMonth();
+            }
+
+            $endDate = null;
+            if ($request->has('end_date') && $request->end_date) {
+                $endDate = \Carbon\Carbon::parse($request->end_date)->endOfMonth();
+            }
+
+            $prices = $prices->filter(function ($item) use ($startDate, $endDate) {
+                // Parse the item's monthObserved as a Carbon instance
+                $itemDate = \Carbon\Carbon::parse($item->date);
+
+                // Apply filter logic for start_date and end_date
+                if ($startDate && !$endDate) {
+                    // If only start_date is provided, filter using 'min' logic: dates >= start_date
+                    return $itemDate >= $startDate;
+                } elseif (!$startDate && $endDate) {
+                    // If only end_date is provided, filter using 'max' logic: dates <= end_date
+                    return $itemDate <= $endDate;
+                } elseif ($startDate && $endDate) {
+                    // If both start_date and end_date are provided, filter using 'between' logic
+                    return $itemDate >= $startDate && $itemDate <= $endDate;
+                }
+
+                // No filtering if neither start_date nor end_date is provided
+                return true;
+            });
+        }
+
+
+        // Check if sorting direction for price is provided and apply it
+        if ($request->has('price') && in_array($request->price, ['asc', 'desc'])) {
+            $prices = $prices->sortBy(function ($item) {
+                return $item->price;
+            });
+
+            // Apply descending order if required
+            if ($request->price == 'desc') {
+                $prices = $prices->reverse();
+            }
+        }
+
+        return view('trends.price', compact('prices', 'cropName', 'variety'));
+    }
+
     public function indexAdmin(Request $request)
     {
         $search = $request->input('search');

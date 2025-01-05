@@ -8,6 +8,40 @@ use Illuminate\Support\Facades\Storage;
 
 class CropController extends Controller
 {
+
+    public function trends(Request $request)
+    {
+        $search = $request->input('search');
+        $type = $request->input('type');
+
+        $crops = Crop::query()
+            ->with('author') // Eager load the author relationship
+            ->when($search, function ($query) use ($search) {
+                $query->where('cropName', 'like', "%$search%")
+                    ->orWhere('variety', 'like', "%$search%");
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->leftJoin('crop_reports as cr', function ($join) {
+                $join->on('crops.cropName', '=', 'cr.cropName') // Join on cropName
+                    ->on('crops.variety', '=', 'cr.variety') // Join on variety
+                    ->whereRaw('cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = cr.cropName AND crop_reports.variety = cr.variety)'); // Get latest month
+            })
+            ->leftJoin('crop_reports as prev_cr', function ($join) {
+                $join->on('crops.cropName', '=', 'prev_cr.cropName') // Join on cropName
+                    ->on('crops.variety', '=', 'prev_cr.variety') // Join on variety
+                    ->whereRaw('prev_cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName AND crop_reports.variety = prev_cr.variety AND crop_reports.monthObserved < (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName AND crop_reports.variety = prev_cr.variety))'); // Get previous month
+            })
+            ->select('crops.*', 'cr.price as latest_price', 'prev_cr.price as previous_price') // Fetch latest price and previous month's price
+            ->orderBy('crops.created_at', 'desc')
+            ->paginate(5);
+
+        return view('trends.index', compact('crops', 'search', 'type'));
+    }
+
+
+
     public function index(Request $request)
     {
         $search = $request->input('search');

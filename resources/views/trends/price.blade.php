@@ -5,18 +5,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('images/logo.webp') }}" type="image/webp">
+    <link rel="stylesheet" href="{{ asset('css/table.css') }}">
     <title>AgroConnect Cabuyao</title>
 </head>
 
 <body>
     @include('header')
     <main class="container my-5">
+        <form method="GET" action="{{ route('trends.price', ['cropName' => $cropName, 'variety' => $variety]) }}"
+            class="mb-3">
+            <div class="input-group">
+                <div class="row w-100">
+                    <div class="col-md-3">
+                        <select name="price" class="form-control">
+                            <option value="" {{ request('price') == '' ? 'selected' : '' }}>None</option>
+                            <option value="asc" {{ request('price') == 'asc' ? 'selected' : '' }}>Ascend</option>
+                            <option value="desc" {{ request('price') == 'desc' ? 'selected' : '' }}>Descend</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div class="col-md-3">
+                        <input type="date" name="start_date" class="form-control"
+                            value="{{ request('start_date') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                    </div>
+
+                    <div class="col-md-3 d-flex">
+                        <button class="btn btn-dark me-2" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="{{ route('trends.price', ['cropName' => $cropName, 'variety' => $variety]) }}"
+                            class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <h1 class="text-center mb-4">Price Monitoring</h1>
-        <h3 class="text-center mb-4">Commodity: Squash</h3>
+        <h3 class="text-center mb-4">Commodity: {{ ucfirst($cropName) }} - {{ ucfirst($variety) }}</h3>
 
         <div class="table-responsive">
-            <table class="table table-bordered table-striped text-center">
-                <thead class="table-dark">
+            <table class="table table-bordered table-hover">
+                <thead class="bg-success text-white">
                     <tr>
                         <th>Date</th>
                         <th>Price (PHP)</th>
@@ -24,27 +59,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dummy Data -->
-                    <tr>
-                        <td>2024-12-01</td>
-                        <td>25.00</td>
-                        <td class="text-success">Up</td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-02</td>
-                        <td>23.50</td>
-                        <td class="text-danger">Down</td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-03</td>
-                        <td>23.50</td>
-                        <td class="text-secondary">No Change</td>
-                    </tr>
-                    <tr>
-                        <td>2024-12-04</td>
-                        <td>24.00</td>
-                        <td class="text-success">Up</td>
-                    </tr>
+                    @foreach ($prices as $price)
+                        <tr>
+                            <td>{{ $price->date }}</td>
+                            <td>{{ number_format($price->price, 2) }}</td>
+                            <td>
+                                <i class="{{ $price->statusIcon }}"></i> {{ $price->status }}
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

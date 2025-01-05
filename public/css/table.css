@@ -1,0 +1,9 @@
+.table>:not(caption)>*>* {
+    background-color: transparent !important;
+    text-align: center;
+}
+
+th {
+    color: #fff !important;
+    padding: 15px !important;
+}
