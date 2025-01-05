@@ -1,0 +1,196 @@
+
+.bg-header {
+    background-color: #6c8e57;
+    color: #fff;
+    padding: 1.5rem 0;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    background-size: cover;
+}
+
+.forecast-container {
+    margin-top: 2rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    color: #2f4f4f;
+    font-weight: bold;
+}
+
+.icon-section img {
+    width: 150px;
+    height: 90px;
+    transition: transform 0.3s ease;
+}
+
+.icon-section img:hover {
+    transform: scale(1.1);
+    /* Slight zoom effect on hover */
+}
+
+.forecast-card .card-body {
+    padding: 1.5rem;
+    text-align: center;
+    color: #333;
+    font-weight: 700;
+}
+
+.forecast-card {
+    border-radius: 20px;
+    background-color: #f8f8f8 !important;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.forecast-card:hover {
+    transform: translateY(-12px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+.forecast-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.metrics img,
+.metrics i,
+.metrics span {
+    cursor: pointer;
+}
+
+.chart-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Disable vertical scrolling */
+}
+
+.chart-wrapper {
+    width: 100%; /* Set a fixed width for the chart to force scrolling */
+    min-height: 300px; /* Minimum height for the chart */
+    max-height: 500px; /* Maximum height for the chart */
+}
+
+#forecastChart {
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) { /* For devices with screen width 768px or smaller */
+    #forecastChart {
+        min-height: 400px !important;
+    }
+}
+
+.chart-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-controls button {
+    margin: 10px;
+}
+
+#datasetControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#datasetControls label {
+    margin: 5px 15px;
+}
+
+#datasetControls input {
+    margin-right: 10px;
+}
+
+.chart-wrapper {
+    max-width: 100%;
+    height: 400px; /* Set a fixed height for the chart */
+}
+
+button {
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+
+
+To design the checkbox inputs without using Bootstrap, you can apply custom CSS to style the checkboxes and labels in a clean and modern way. Here's how you can achieve a neat design for the checkbox controls:
+
+HTML Structure (unchanged)
+html
+Copy code
+<div id="datasetControls" class="mt-2">
+    <label><input type="checkbox" data-dataset="0" checked> Max Temperature</label>
+    <label><input type="checkbox" data-dataset="1" checked> Min Temperature</label>
+    <label><input type="checkbox" data-dataset="2" checked> Humidity</label>
+    <label><input type="checkbox" data-dataset="3" checked> Rain Probability</label>
+    <label><input type="checkbox" data-dataset="4" checked> Wind Speed</label>
+</div>
+CSS Styling (No Bootstrap)
+css
+Copy code
+#datasetControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Adds spacing between checkboxes */
+}
+
+#datasetControls label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+#datasetControls input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and label text */
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #008000; /* Change checkbox color (green) */
+    transition: all 0.3s ease;
+}
+
+#datasetControls input[type="checkbox"]:checked {
+    background-color: #008000; /* Green background when checked */
+}
+#datasetControls label:hover input[type="checkbox"] {
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+
+#datasetControls label:hover {
+    color: #2774e9; /* Change label text color on hover */
+}
+
+@media (max-width: 768px) {
+    #datasetControls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #datasetControls label {
+        font-size: 14px; /* Smaller font on mobile */
+    }
+}
