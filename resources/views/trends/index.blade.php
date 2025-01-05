@@ -90,7 +90,8 @@
                                         class="btn btn-primary btn-sm mb-2 me-1 d-block w-100">
                                         <i class="fas fa-tag"></i> Price
                                     </a>
-                                    <a href="/stats" class="btn btn-success btn-sm mb-2 me-1 d-block w-100">
+                                    <a href="{{ route('trends.stats', ['cropName' => $crop->cropName, 'variety' => $crop->variety]) }}"
+                                        class="btn btn-success btn-sm mb-2 me-1 d-block w-100">
                                         <i class="fas fa-chart-line"></i> Stats
                                     </a>
                                     <a href="{{ route('trends.info', $crop) }}"

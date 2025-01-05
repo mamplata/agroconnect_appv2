@@ -31,9 +31,9 @@ class CropReportSeeder extends Seeder
             if ($data['cropName'] === 'Rice') {
                 $data['type'] = 'Rice';
             } elseif ($data['cropName'] === 'Watermelon') {
-                $data['type'] = 'Fruit';
+                $data['type'] = 'Fruits';
             } else {
-                $data['type'] = 'Vegetable';
+                $data['type'] = 'Vegetables';
             }
         }
         unset($data); // Unset reference to avoid issues

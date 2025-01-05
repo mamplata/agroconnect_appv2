@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const forecastData = weatherData.DailyForecasts;
-    console.log(forecastData);
+
     const labels = weatherData.DailyForecasts.map((forecast) => {
         const date = new Date(forecast.Date);
         return date.toLocaleDateString("en-US", {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             day: "numeric",
         });
     });
-    console.log(labels);
+
     const maxTemperatureData = forecastData.map(
         (day) => day.Temperature.Maximum.Value
     );

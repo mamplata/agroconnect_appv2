@@ -78,7 +78,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="/trends" class="btn btn-primary">Back</a>
+            <a href="/trends" class="btn btn-primary btn-lg">Back</a>
         </div>
     </main>
 

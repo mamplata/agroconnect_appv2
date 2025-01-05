@@ -17,25 +17,35 @@ class CropController extends Controller
         $crops = Crop::query()
             ->with('author') // Eager load the author relationship
             ->when($search, function ($query) use ($search) {
-                $query->where('cropName', 'like', "%$search%")
-                    ->orWhere('variety', 'like', "%$search%");
+                $query->where('crops.cropName', 'like', "%$search%") // Explicitly specify the table
+                    ->orWhere('crops.variety', 'like', "%$search%"); // Explicitly specify the table
             })
             ->when($type, function ($query) use ($type) {
-                $query->where('type', $type);
+                // Make sure to specify which table the 'type' belongs to
+                $query->where('crops.type', $type);
             })
             ->leftJoin('crop_reports as cr', function ($join) {
                 $join->on('crops.cropName', '=', 'cr.cropName') // Join on cropName
-                    ->on('crops.variety', '=', 'cr.variety') // Join on variety
-                    ->whereRaw('cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = cr.cropName AND crop_reports.variety = cr.variety)'); // Get latest month
+                    ->whereRaw('cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = cr.cropName)'); // Get latest month
+                // If variety is available, include that as well
+                if (isset($join->variety)) {
+                    $join->on('crops.variety', '=', 'cr.variety');
+                }
             })
             ->leftJoin('crop_reports as prev_cr', function ($join) {
                 $join->on('crops.cropName', '=', 'prev_cr.cropName') // Join on cropName
-                    ->on('crops.variety', '=', 'prev_cr.variety') // Join on variety
-                    ->whereRaw('prev_cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName AND crop_reports.variety = prev_cr.variety AND crop_reports.monthObserved < (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName AND crop_reports.variety = prev_cr.variety))'); // Get previous month
+                    ->whereRaw('prev_cr.monthObserved = (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName AND crop_reports.monthObserved < (SELECT MAX(monthObserved) FROM crop_reports WHERE crop_reports.cropName = prev_cr.cropName))'); // Get previous month
+                // If variety is available, include that as well
+                if (isset($join->variety)) {
+                    $join->on('crops.variety', '=', 'prev_cr.variety');
+                }
             })
             ->select('crops.*', 'cr.price as latest_price', 'prev_cr.price as previous_price') // Fetch latest price and previous month's price
             ->orderBy('crops.created_at', 'desc')
             ->paginate(5);
+
+        // Pass search and type to the pagination links
+        $crops->appends(['search' => $search, 'type' => $type]);
 
         return view('trends.index', compact('crops', 'search', 'type'));
     }
@@ -57,8 +67,12 @@ class CropController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(5);
 
+        // Preserve the search and type query parameters in the pagination links
+        $crops->appends(['search' => $search, 'type' => $type]);
+
         return view('crops.index', compact('crops', 'search', 'type'));
     }
+
 
     public function indexAdmin(Request $request)
     {
@@ -76,6 +90,9 @@ class CropController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->paginate(5);
+
+        // Preserve the search and type query parameters in the pagination links
+        $crops->appends(['search' => $search, 'type' => $type]);
 
         return view('admin.crops.index', compact('crops', 'search', 'type'));
     }

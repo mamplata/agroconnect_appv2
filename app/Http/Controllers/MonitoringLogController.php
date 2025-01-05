@@ -24,6 +24,9 @@ class MonitoringLogController extends Controller
             ->latest()
             ->paginate(5);
 
+        // Append the search parameter to the pagination links
+        $logs->appends(['search' => $search]);
+
         // Return the view with the logs and search parameter
         return view('admin.logs.index', compact('logs', 'search'));
     }

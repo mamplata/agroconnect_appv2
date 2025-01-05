@@ -2,32 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Crop;
 use App\Models\CropReport;
 use Illuminate\Http\Request;
 
 class CropReportController extends Controller
 {
-    public function index(Request $request)
-    {
-        $search = $request->input('search');
-        $type = $request->input('type');
-        $sortBy = $request->input('sortBy', 'created_at');
-        $sortOrder = $request->input('sortOrder', 'desc');
-
-        $cropReports = CropReport::query()
-            ->with(['user', 'modifier']) // Eager load relationships
-            ->when($search, function ($query) use ($search) {
-                $query->where('cropName', 'like', "%$search%")
-                    ->orWhere('variety', 'like', "%$search%");
-            })
-            ->when($type, function ($query) use ($type) {
-                $query->where('type', $type);
-            })
-            ->orderBy($sortBy, $sortOrder)
-            ->paginate(5);
-
-        return view('crop_reports.index', compact('cropReports', 'search', 'type', 'sortBy', 'sortOrder'));
-    }
 
     public function trendsShow(Request $request, $cropName, $variety)
     {
@@ -116,6 +96,32 @@ class CropReportController extends Controller
         return view('trends.price', compact('prices', 'cropName', 'variety'));
     }
 
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $type = $request->input('type');
+        $sortBy = $request->input('sortBy', 'created_at');
+        $sortOrder = $request->input('sortOrder', 'desc');
+
+        $cropReports = CropReport::query()
+            ->with(['user', 'modifier']) // Eager load relationships
+            ->when($search, function ($query) use ($search) {
+                $query->where('cropName', 'like', "%$search%")
+                    ->orWhere('variety', 'like', "%$search%");
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate(5);
+
+        // Preserve search, type, sortBy, and sortOrder in pagination links
+        $cropReports->appends(['search' => $search, 'type' => $type, 'sortBy' => $sortBy, 'sortOrder' => $sortOrder]);
+
+        return view('crop_reports.index', compact('cropReports', 'search', 'type', 'sortBy', 'sortOrder'));
+    }
+
+
     public function indexAdmin(Request $request)
     {
         $search = $request->input('search');
@@ -135,9 +141,63 @@ class CropReportController extends Controller
             ->orderBy($sortBy, $sortOrder)
             ->paginate(5);
 
+        // Preserve search, type, sortBy, and sortOrder in pagination links
+        $cropReports->appends(['search' => $search, 'type' => $type, 'sortBy' => $sortBy, 'sortOrder' => $sortOrder]);
+
         return view('admin.crop_reports.index', compact('cropReports', 'search', 'type', 'sortBy', 'sortOrder'));
     }
 
+    public function stats(Request $request, $cropName, $variety)
+    {
+        // Fetch data for the specified cropName and variety
+        $data = CropReport::where('cropName', $cropName)
+            ->where('variety', $variety)
+            ->orderBy('monthObserved')
+            ->get();
+
+        // Format the data for Chart.js
+        $chartData = [
+            'labels' => $data->pluck('monthObserved')->map(function ($date) {
+                return \Carbon\Carbon::createFromFormat('Y-m', $date)->format('F Y');
+            }),
+            'datasets' => [
+                [
+                    'label' => 'Area Planted (ha)',
+                    'data' => $data->pluck('areaPlanted'),
+                    'borderColor' => 'rgba(153, 102, 255, 1)',
+                    'yAxisID' => 'y1',
+                ],
+                [
+                    'label' => 'Production Volume (MT)',
+                    'data' => $data->pluck('productionVolume'),
+                    'borderColor' => 'rgba(255, 159, 64, 1)',
+                    'yAxisID' => 'y',
+                ],
+                [
+                    'label' => 'Yield (MT/ha)',
+                    'data' => $data->pluck('yield'),
+                    'borderColor' => 'rgba(54, 162, 235, 1)',
+                    'yAxisID' => 'y1',
+                ],
+                [
+                    'label' => 'Price',
+                    'data' => $data->pluck('price'),
+                    'borderColor' => 'rgba(255, 99, 132, 1)',
+                    'yAxisID' => 'y2',
+                ],
+                [
+                    'label' => 'Price Income',
+                    'data' => $data->map(function ($item) {
+                        return $item->productionVolume * $item->price;
+                    }),
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'yAxisID' => 'y2',
+                ],
+            ],
+        ];
+
+        return view('trends.stats', compact('chartData', 'cropName', 'variety'));
+    }
 
 
     public function create()
