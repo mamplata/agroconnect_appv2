@@ -25,6 +25,9 @@
                         <x-nav-link :href="route('admin.crop_reports.index')" :active="request()->routeIs('admin.crop_reports.index')" class="text-white font-bold">
                             <i class="fas fa-clipboard-list me-2"></i>{{ __('View Crop Reports') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.damage_reports.index')" :active="request()->routeIs('admin.damage_reports.index')" class="text-white font-bold">
+                            <i class="fas fa-exclamation-triangle me-2"></i>{{ __('View Damage Reports') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')" class="text-white font-bold">
                             <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
                         </x-nav-link>
@@ -37,6 +40,9 @@
                         </x-nav-link>
                         <x-nav-link :href="route('crop_reports.index')" :active="request()->routeIs('crop_reports.index')" class="text-white font-bold">
                             <i class="fas fa-clipboard-list me-2"></i>{{ __('Manage Crop Reports') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('damage_reports.index')" :active="request()->routeIs('damage_reports.index')" class="text-white font-bold">
+                            <i class="fas fa-exclamation-triangle me-2"></i>{{ __('Manage Damage Reports') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -126,6 +132,10 @@
                     class="text-white font-bold {{ request()->routeIs('admin.crop_reports.index') ? 'active-link' : '' }}">
                     <i class="fas fa-clipboard-list me-2"></i>{{ __('View Crop Reports') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.damage_reports.index')" :active="request()->routeIs('admin.damage_reports.index')"
+                    class="text-white font-bold {{ request()->routeIs('admin.damage_reports.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{ __('View Damage Reports') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.index')"
                     class="text-white font-bold {{ request()->routeIs('admin.logs.index') ? 'active-link' : '' }}">
                     <i class="fas fa-history me-2"></i>{{ __('View Logs') }}
@@ -142,6 +152,10 @@
                 <x-responsive-nav-link :href="route('crop_reports.index')" :active="request()->routeIs('crop_reports.index')"
                     class="text-white font-bold {{ request()->routeIs('crop_reports.index') ? 'active-link' : '' }}">
                     <i class="fas fa-clipboard-list me-2"></i>{{ __('Manage Crop Reports') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('damage_reports.index')" :active="request()->routeIs('damage_reports.index')"
+                    class="text-white font-bold {{ request()->routeIs('damage_reports.index') ? 'active-link' : '' }}">
+                    <i class="fas fa-exclamation-triangle me-2"></i>{{ __('Manage Damage Reports') }}
                 </x-responsive-nav-link>
             @endif
         </div>

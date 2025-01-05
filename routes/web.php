@@ -5,6 +5,7 @@ use App\Http\Controllers\MonitoringLogController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CropController;
 use App\Http\Controllers\CropReportController;
+use App\Http\Controllers\DamageReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WeatherForecastController;
 use App\Models\AdditionalInformation;
@@ -49,6 +50,14 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/manage-crop-report/{cropReport}/edit', [CropReportController::class, 'edit'])->name('crop_reports.edit');
     Route::put('/manage-crop-report/{cropReport}', [CropReportController::class, 'update'])->name('crop_reports.update');
     Route::delete('/manage-crop-report/{cropReport}', [CropReportController::class, 'destroy'])->name('crop_reports.destroy');
+
+    //Damage Reports
+    Route::get('/manage-damage-report', [DamageReportController::class, 'index'])->name('damage_reports.index');
+    Route::get('/manage-damage-report/create', [DamageReportController::class, 'create'])->name('damage_reports.create');
+    Route::post('/manage-damage-report/store', [DamageReportController::class, 'store'])->name('damage_reports.store');
+    Route::get('/manage-damage-report/{damageReport}/edit', [DamageReportController::class, 'edit'])->name('damage_reports.edit');
+    Route::put('/manage-damage-report/{damageReport}', [DamageReportController::class, 'update'])->name('damage_reports.update');
+    Route::delete('/manage-damage-report/{damageReport}', [DamageReportController::class, 'destroy'])->name('damage_reports.destroy');
 });
 
 Route::middleware('auth')->group(function () {
@@ -75,6 +84,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
     //Crop Reports
     Route::get('/view-crop-reports', [CropReportController::class, 'indexAdmin'])->name('admin.crop_reports.index');
+
+    //Damages Reports
+    Route::get('/view-damage-report', [DamageReportController::class, 'indexAdmin'])->name('admin.damage_reports.index');
 
     //Logs
     Route::get('/admin/logs', [MonitoringLogController::class, 'index'])->name('admin.logs.index');
