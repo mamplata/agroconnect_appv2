@@ -26,8 +26,9 @@
                     </div>
                     <div class="col-md-2">
                         <select name="sortBy" class="form-control">
-                            <option value="created_at" {{ old('sortBy', $sortBy) == 'created_at' ? 'selected' : '' }}>
-                                Sort by Date</option>
+                            <option value="monthObserved"
+                                {{ old('sortBy', $sortBy) == 'monthObserved' ? 'selected' : '' }}>
+                                Sort by Month Observed</option>
                             <option value="areaPlanted" {{ old('sortBy', $sortBy) == 'areaPlanted' ? 'selected' : '' }}>
                                 Sort by Area Planted</option>
                             <option value="productionVolume"

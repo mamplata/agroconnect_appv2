@@ -9,16 +9,23 @@
         <!-- Search Form -->
         <form method="GET" action="{{ route('admin.logs.index') }}" class="mb-3">
             <div class="input-group">
-                <input type="text" class="form-control" name="search"
-                    placeholder="Search by Action, Model, Changes or User" value="{{ old('search', $search) }}">
-                <button class="btn btn-dark" type="submit">
-                    <i class="fas fa-search"></i> Search
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="resetSearch()">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
+                <div class="row w-100">
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="search"
+                            placeholder="Search by Action, Model, Changes or User" value="{{ old('search', $search) }}">
+                    </div>
+                    <div class="col-md-3 d-flex">
+                        <button class="btn btn-dark me-2" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="{{ route('admin.logs.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-redo"></i> Reset
+                        </a>
+                    </div>
+                </div>
             </div>
         </form>
+
 
         <!-- Display Success or Error Messages -->
         @if (session('status'))

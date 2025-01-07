@@ -8,131 +8,156 @@ use Carbon\Carbon;
 
 class DamageReportController extends Controller
 {
-    // Display the list of damage reports
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        $search = $request->input('search', '');
-        $type = $request->input('type', '');
+        $search = $request->input('search');
+        $type = $request->input('type');
+        $damageType = $request->input('damageType'); // New filter for damage type
         $sortBy = $request->input('sortBy', 'created_at');
         $sortOrder = $request->input('sortOrder', 'desc');
 
         $damageReports = DamageReport::query()
-            ->where('crop_name', 'like', "%{$search}%")
-            ->where(function ($query) use ($type) {
-                if ($type) {
-                    $query->where('type', $type);
-                }
+            ->with(['user', 'modifier']) // Eager load relationships
+            ->when($search, function ($query) use ($search) {
+                $query->where('cropName', 'like', "%$search%")
+                    ->orWhere('variety', 'like', "%$search%");
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->when($damageType, function ($query) use ($damageType) { // Apply damage type filter
+                $query->where('damage_type', $damageType);
             })
             ->orderBy($sortBy, $sortOrder)
-            ->paginate(10);
+            ->paginate(5);
 
-        return view('damage_reports.index', compact('damageReports', 'search', 'type', 'sortBy', 'sortOrder'));
+        // Preserve search, type, damageType, sortBy, and sortOrder in pagination links
+        $damageReports->appends(['search' => $search, 'type' => $type, 'damageType' => $damageType, 'sortBy' => $sortBy, 'sortOrder' => $sortOrder]);
+
+        return view('damage_reports.index', compact('damageReports', 'search', 'type', 'damageType', 'sortBy', 'sortOrder'));
     }
 
-    // Display the list of damage reports
+
     public function indexAdmin(Request $request)
     {
-        $search = $request->input('search', '');
-        $type = $request->input('type', '');
+        $search = $request->input('search');
+        $type = $request->input('type');
+        $damageType = $request->input('damageType'); // New filter for damage type
         $sortBy = $request->input('sortBy', 'created_at');
         $sortOrder = $request->input('sortOrder', 'desc');
 
         $damageReports = DamageReport::query()
-            ->where('crop_name', 'like', "%{$search}%")
-            ->where(function ($query) use ($type) {
-                if ($type) {
-                    $query->where('type', $type);
-                }
+            ->with(['user', 'modifier']) // Eager load relationships
+            ->when($search, function ($query) use ($search) {
+                $query->where('cropName', 'like', "%$search%")
+                    ->orWhere('variety', 'like', "%$search%");
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
+            ->when($damageType, function ($query) use ($damageType) { // Apply damage type filter
+                $query->where('damage_type', $damageType);
             })
             ->orderBy($sortBy, $sortOrder)
-            ->paginate(10);
+            ->paginate(5);
 
-        return view('admin.damage_reports.index', compact('damageReports', 'search', 'type', 'sortBy', 'sortOrder'));
+        // Preserve search, type, damageType, sortBy, and sortOrder in pagination links
+        $damageReports->appends(['search' => $search, 'type' => $type, 'damageType' => $damageType, 'sortBy' => $sortBy, 'sortOrder' => $sortOrder]);
+
+        return view('admin.damage_reports.index', compact('damageReports', 'search', 'type', 'damageType', 'sortBy', 'sortOrder'));
     }
 
-    // Show the form to create a new damage report
+
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('damage_reports.create');
     }
 
-    // Store a new damage report
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'crop_name' => 'required|string',
-            'variety' => 'required|string',
-            'type' => 'required|in:Rice,Vegetables,Fruits',
+            'crop_name' => 'required|string|max:255',
+            'variety' => 'required|string|max:255',
+            'type' => 'required|in:Vegetables,Fruits,Rice',
             'damage_type' => 'required|in:Natural Disaster,Pest,Disease',
-            'natural_disaster_type' => 'nullable|string',
-            'disaster_name' => 'nullable|string',
-            'pest_or_disease' => 'nullable|string',
-            'area_planted' => 'required|numeric',
-            'area_affected' => 'required|numeric',
-            'month_observed' => 'required|date_format:Y-m',
+            'natural_disaster_type' => 'nullable|string|max:255',
+            'damage_name' => 'nullable|string|max:255',
+            'area_planted' => 'required|numeric|min:0',
+            'area_affected' => 'required|numeric|min:0',
+            'monthObserved' => 'required|date_format:Y-m',
         ]);
 
-        // Store the damage report
-        $damageReport = DamageReport::create([
-            'crop_name' => $validated['crop_name'],
-            'variety' => $validated['variety'],
-            'type' => $validated['type'],
-            'damage_type' => $validated['damage_type'],
-            'natural_disaster_type' => $validated['damage_type'] == 'Natural Disaster' ? $validated['natural_disaster_type'] : null,
-            'disaster_name' => $validated['damage_type'] == 'Natural Disaster' ? $validated['disaster_name'] : null,
-            'pest_or_disease' => $validated['damage_type'] == 'Pest' || $validated['damage_type'] == 'Disease' ? $validated['pest_or_disease'] : null,
-            'area_planted' => $validated['area_planted'],
-            'area_affected' => $validated['area_affected'],
-            'month_observed' => Carbon::createFromFormat('Y-m', $validated['month_observed']),
-            'author_id' => auth()->id(),  // Assuming authentication is in place
-        ]);
+        // Format the monthObserved to 'YYYY-MM' if it's a valid date
+        $formattedMonthObserved = \Carbon\Carbon::createFromFormat('Y-m', $request->monthObserved)->format('Y-m');
 
-        return redirect()->route('damage_reports.index')->with('status', 'Damage report created successfully.');
+        DamageReport::create(array_merge($request->all(), [
+            'monthObserved' => $formattedMonthObserved,  // Store the formatted value
+            'user_id' => auth()->id(),  // Add the current user as the creator
+        ]));
+
+        return redirect()->route('damage_reports.index')->with([
+            'status' => 'Damage report added successfully!',
+            'status_type' => 'success',
+        ]);
     }
 
-    // Show the form to edit an existing damage report
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(DamageReport $damageReport)
     {
         return view('damage_reports.edit', compact('damageReport'));
     }
 
-    // Update an existing damage report
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, DamageReport $damageReport)
     {
-        $validated = $request->validate([
-            'crop_name' => 'required|string',
-            'variety' => 'required|string',
-            'type' => 'required|in:Rice,Vegetables,Fruits',
+        $validatedData = $request->validate([
+            'crop_name' => 'required|string|max:255',
+            'variety' => 'required|string|max:255',
+            'type' => 'required|in:Vegetables,Fruits,Rice',
             'damage_type' => 'required|in:Natural Disaster,Pest,Disease',
-            'natural_disaster_type' => 'nullable|string',
-            'disaster_name' => 'nullable|string',
-            'pest_or_disease' => 'nullable|string',
-            'area_planted' => 'required|numeric',
-            'area_affected' => 'required|numeric',
-            'month_observed' => 'required|date_format:Y-m',
+            'natural_disaster_type' => 'nullable|string|max:255',
+            'damage_name' => 'nullable|string|max:255',
+            'area_planted' => 'required|numeric|min:0',
+            'area_affected' => 'required|numeric|min:0',
+            'monthObserved' => 'required|date_format:Y-m',
         ]);
 
-        $damageReport->update([
-            'crop_name' => $validated['crop_name'],
-            'variety' => $validated['variety'],
-            'type' => $validated['type'],
-            'damage_type' => $validated['damage_type'],
-            'natural_disaster_type' => $validated['damage_type'] == 'Natural Disaster' ? $validated['natural_disaster_type'] : null,
-            'disaster_name' => $validated['damage_type'] == 'Natural Disaster' ? $validated['disaster_name'] : null,
-            'pest_or_disease' => $validated['damage_type'] == 'Pest' || $validated['damage_type'] == 'Disease' ? $validated['pest_or_disease'] : null,
-            'area_planted' => $validated['area_planted'],
-            'area_affected' => $validated['area_affected'],
-            'month_observed' => Carbon::createFromFormat('Y-m', $validated['month_observed']),
-            'modifier_id' => auth()->id(),  // Assuming authentication is in place
-        ]);
 
-        return redirect()->route('damage_reports.index')->with('status', 'Damage report updated successfully.');
+        // If the validation passes, update the crop report
+        $damageReport->update(array_merge($validatedData, [
+            'modified_by' => auth()->id(),  // Store the user ID of the person modifying the record
+        ]));
+
+
+        return redirect()->route('damage_reports.index')->with([
+            'status' => 'Damage report updated successfully!',
+            'status_type' => 'success',
+        ]);
     }
 
-    // Delete a damage report
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(DamageReport $damageReport)
     {
         $damageReport->delete();
-        return redirect()->route('damage_reports.index')->with('status', 'Damage report deleted successfully.');
+
+        return redirect()->route('damage_reports.index')->with([
+            'status' => 'Damage report deleted successfully!',
+            'status_type' => 'success',
+        ]);
     }
 }

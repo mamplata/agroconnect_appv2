@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\AdditionalInformation;
 use App\Models\Crop;
 use App\Models\CropReport;
+use App\Models\DamageReport;
 use App\Models\User;
 use App\Observers\MultiModelObserver;
 use Illuminate\Pagination\Paginator;
@@ -31,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         Crop::observe(MultiModelObserver::class);
         AdditionalInformation::observe(MultiModelObserver::class);
         CropReport::observe(MultiModelObserver::class);
+        DamageReport::observe(MultiModelObserver::class);
     }
 }

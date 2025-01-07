@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CropSeeder::class);
         $this->call(CropReportSeeder::class);
         $this->call(AdditionalInformationSeeder::class);
+        $this->call(DamageReportSeeder::class);
     }
 }

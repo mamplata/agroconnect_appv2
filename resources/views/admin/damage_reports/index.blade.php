@@ -1,12 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Manage Damage Reports') }}
+            {{ __('View Damage Reports') }}
         </h2>
     </x-slot>
 
     <div class="container mt-5">
-        <!-- Search and Filter Form -->
         <form method="GET" action="{{ route('admin.damage_reports.index') }}" class="mb-3">
             <div class="input-group">
                 <div class="row w-100">
@@ -78,11 +77,6 @@
             </div>
         @endif
 
-        <!-- Link to Add Damage Report Page -->
-        <a href="{{ route('damage_reports.create') }}" class="btn btn-dark mb-3">
-            <i class="fas fa-plus"></i> Add Damage Report
-        </a>
-
         <!-- Damage Report Table -->
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -100,7 +94,6 @@
                         <th>Month Observed</th>
                         <th>Author</th>
                         <th>Modified By</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,28 +112,6 @@
                             </td>
                             <td>{{ $damageReport->author->name ?? 'Unknown' }}</td>
                             <td>{{ $damageReport->modifier->name ?? 'N/A' }}</td>
-                            <td>
-                                <div class="input-group">
-                                    <div class="w-100 mb-2">
-                                        <a href="{{ route('damage_reports.edit', $damageReport) }}"
-                                            class="btn btn-sm btn-primary w-100">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                    </div>
-                                    <div class="w-100">
-                                        <form method="POST"
-                                            action="{{ route('damage_reports.destroy', $damageReport) }}"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger w-100"
-                                                onclick="return confirm('Are you sure you want to delete this damage report?')">
-                                                <i class="fas fa-trash"></i> Delete
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>

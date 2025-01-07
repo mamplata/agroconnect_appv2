@@ -13,23 +13,22 @@ return new class extends Migration
     {
         Schema::create('damage_reports', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for user
+            $table->unsignedBigInteger('modified_by')->nullable(); // Foreign key for user who modified the record
             $table->string('crop_name');
             $table->string('variety');
             $table->enum('type', ['Rice', 'Vegetables', 'Fruits']);  // Crop type
             $table->enum('damage_type', ['Natural Disaster', 'Pest', 'Disease']);
             $table->string('natural_disaster_type')->nullable();  // Only if damage type is 'Natural Disaster'
-            $table->string('disaster_name')->nullable();  // Only if damage type is 'Natural Disaster'
-            $table->string('pest_or_disease')->nullable();  // Only if damage type is 'Pest' or 'Disease'
+            $table->string('damage_name')->nullable();  // damage name
             $table->float('area_planted');  // Full area in hectares
             $table->float('area_affected');  // Affected area in hectares
-            $table->date('month_observed');  // Month observed (Date format)
-            $table->unsignedBigInteger('author_id')->nullable();
-            $table->unsignedBigInteger('modifier_id')->nullable();
+            $table->string('monthObserved', 7); // Month observed (Date format)
             $table->timestamps();
 
-            // Foreign key constraints (assuming the users table exists)
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('modifier_id')->references('id')->on('users')->onDelete('set null');
+            // Set up foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('modified_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 
