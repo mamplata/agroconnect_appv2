@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const ctx = document.getElementById("multiAxisChart").getContext("2d");
+    console.log(chartData.labels);
     const multiAxisChart = new Chart(ctx, {
         type: "line",
         data: {

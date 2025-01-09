@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class CropReportController extends Controller
 {
 
-    public function trendsShow(Request $request, $cropName, $variety)
+    public function price(Request $request, $cropName, $variety)
     {
         // Start the query to retrieve the price data for the specified crop name and variety
         $query = CropReport::where('cropName', $cropName)

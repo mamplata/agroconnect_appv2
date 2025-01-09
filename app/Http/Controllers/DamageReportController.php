@@ -8,9 +8,74 @@ use Carbon\Carbon;
 
 class DamageReportController extends Controller
 {
+    public function stats(Request $request)
+    {
+        // Fetch all damage data
+        $data = DamageReport::orderBy('monthObserved')->get();
+
+        // Group data by cropName and variety
+        $groupedData = $data->groupBy(function ($item) {
+            return $item->crop_name . ' - ' . $item->variety;
+        });
+
+        // Prepare datasets for grouped bar chart
+        $groupedChartData = [
+            'labels' => $data->pluck('monthObserved')
+                ->map(function ($date) {
+                    return \Carbon\Carbon::createFromFormat('Y-m', $date)->format('F Y');
+                })
+                ->unique()
+                ->values(),
+            'datasets' => [],
+        ];
+
+        foreach ($groupedData as $key => $group) {
+            // Add Area Planted dataset
+            $groupedChartData['datasets'][] = [
+                'label' => $key . ' (Area Planted)',
+                'data' => $groupedChartData['labels']->map(function ($month) use ($group) {
+                    return $group->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_planted');
+                }),
+                'backgroundColor' => 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.5)',  // Random color
+                'borderColor' => 'rgba(0,0,0,0.1)',
+                'borderWidth' => 1,
+            ];
+
+            // Add Area Affected dataset
+            $groupedChartData['datasets'][] = [
+                'label' => $key . ' (Area Affected)',
+                'data' => $groupedChartData['labels']->map(function ($month) use ($group) {
+                    return $group->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_affected');
+                }),
+                'backgroundColor' => 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.8)',  // Random color
+                'borderColor' => 'rgba(0,0,0,0.1)',
+                'borderWidth' => 1,
+            ];
+        }
+
+        // Prepare data for the pie chart
+        $pieChartData = [
+            'labels' => $groupedData->keys(),
+            'datasets' => [
+                [
+                    'label' => 'Total Areas',
+                    'data' => $groupedData->map(function ($group) {
+                        return $group->sum('area_affected') / $group->sum('area_planted') * 100; // Percentage affected
+                    })->values(),
+                    'backgroundColor' => $groupedData->keys()->map(function () {
+                        return 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.8)';
+                    })->toArray(),
+                ],
+            ],
+        ];
+
+        return view('damages.index', compact('groupedChartData', 'pieChartData'));
+    }
+
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
         $search = $request->input('search');
