@@ -6,11 +6,13 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CropController;
 use App\Http\Controllers\CropReportController;
 use App\Http\Controllers\DamageReportController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WeatherForecastController;
 use App\Models\AdditionalInformation;
 use App\Models\CropReport;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //HOME
 Route::get('/', function () {
@@ -32,9 +34,7 @@ Route::get('damages/diseases', [DamageReportController::class, 'diseases'])->nam
 Route::get('damages/natural-disaster', [DamageReportController::class, 'disasters'])->name('damages.disasters');
 
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, "user"])->name('dashboard');
 
     //Crops
     Route::get('/manage-crop', [CropController::class, 'index'])->name('crops.index');
@@ -72,9 +72,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
 
     //Users
     Route::get('/admin/manage-users', [RegisteredUserController::class, 'index'])

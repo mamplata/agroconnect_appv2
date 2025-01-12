@@ -1,0 +1,117 @@
+body {
+    text-align: justify;
+}
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: auto; /* Enable horizontal scrolling for small screens */
+    overflow-y: hidden;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.chart-wrapper {
+    width: 100%;
+    min-height: 300px;
+    max-height: 500px;
+    display: flex;
+    justify-content: center; /* Centers the chart */
+    align-items: center;
+    padding-bottom: 30px; /* Space for long x-axis labels */
+}
+
+#updateChart {
+    width: 100%;
+    height: 400px !important;
+}
+
+.chart-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-controls button {
+    margin: 10px;
+}
+
+#datasetControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#datasetControls label {
+    margin: 5px 15px;
+}
+
+#datasetControls input {
+    margin-right: 10px;
+}
+
+.chart-wrapper {
+    max-width: 100%;
+    height: 400px; /* Set a fixed height for the chart */
+}
+
+button {
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+#datasetControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Adds spacing between checkboxes */
+}
+
+#datasetControls label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+#datasetControls input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and label text */
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #008000; /* Change checkbox color (green) */
+    transition: all 0.3s ease;
+}
+
+#datasetControls input[type="checkbox"]:checked {
+    background-color: #008000; /* Green background when checked */
+}
+#datasetControls label:hover input[type="checkbox"] {
+    transform: scale(1.1); /* Slightly increase size on hover */
+}
+
+#datasetControls label:hover {
+    color: #2774e9; /* Change label text color on hover */
+}
+
+@media (max-width: 768px) {
+    #datasetControls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #datasetControls label {
+        font-size: 14px; /* Smaller font on mobile */
+    }
+}
