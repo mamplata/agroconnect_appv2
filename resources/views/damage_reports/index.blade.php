@@ -7,7 +7,7 @@
 
     <div class="container mt-5">
         <!-- Search and Filter Form -->
-        <form method="GET" action="{{ route('admin.damage_reports.index') }}" class="mb-3">
+        <form method="GET" action="{{ route('damage_reports.index') }}" class="mb-3">
             <div class="input-group">
                 <div class="row w-100">
                     <div class="col-md-2 col-sm-6">
@@ -61,7 +61,7 @@
                         <button class="btn btn-dark me-2" type="submit">
                             <i class="fas fa-search"></i> Search
                         </button>
-                        <a href="{{ route('admin.damage_reports.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('damage_reports.index') }}" class="btn btn-secondary">
                             <i class="fas fa-redo"></i> Reset
                         </a>
                     </div>
@@ -107,7 +107,7 @@
                     @foreach ($damageReports as $index => $damageReport)
                         <tr>
                             <td>{{ $damageReports->firstItem() + $index }}</td>
-                            <td>{{ $damageReport->crop_name }}</td>
+                            <td>{{ $damageReport->cropName }}</td>
                             <td>{{ $damageReport->variety }}</td>
                             <td>{{ $damageReport->type }}</td>
                             <td>{{ $damageReport->damage_type }}</td>

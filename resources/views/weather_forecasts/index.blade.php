@@ -25,7 +25,6 @@
                             <i class="fas fa-cloud"></i> <!-- Icon -->
                             Headline: {{ $weatherData['Headline']['Text'] ?? 'N/A' }}
                         </h3>
-
                         <!-- 5-Day Forecast -->
                         <div class="forecast-container">
                             <div id="forecast"
@@ -33,33 +32,29 @@
                                 <!-- Dynamically inserted forecast cards will appear here -->
                             </div>
                         </div>
-                        <div class="chart-container mt-5">
-                            <!-- Chart Selection Section (Placed Above the Chart) -->
-                            <div class="chart-controls mt-3 text-center">
-                                <h3 class="chart-title">Weather Forecast Chart (Temperature)</h3>
-                                <div>
-                                    <button id="selectAll" class="btn btn-primary mx-2">Select All</button>
-                                    <button id="unselectAll" class="btn btn-secondary mx-2">Unselect All</button>
-                                </div>
-                                <div id="datasetControls" class="mt-2">
-                                    <label><input type="checkbox" data-dataset="0" checked> Max Temperature</label>
-                                    <label><input type="checkbox" data-dataset="1" checked> Min Temperature</label>
-                                    <label><input type="checkbox" data-dataset="2" checked> Humidity</label>
-                                    <label><input type="checkbox" data-dataset="3" checked> Rain Probability</label>
-                                    <label><input type="checkbox" data-dataset="4" checked> Wind Speed</label>
-                                </div>
+                        <!-- Chart Selection Section (Placed Above the Chart) -->
+                        <div class="chart-controls mt-3 text-center">
+                            <h3 class="chart-title">Weather Forecast Chart (Temperature)</h3>
+                            <div>
+                                <button id="selectAll" class="btn btn-primary mx-2">Select All</button>
+                                <button id="unselectAll" class="btn btn-secondary mx-2">Unselect All</button>
                             </div>
-
+                            <div id="datasetControls" class="mt-2">
+                                <label><input type="checkbox" data-dataset="0" checked> Max Temperature</label>
+                                <label><input type="checkbox" data-dataset="1" checked> Min Temperature</label>
+                                <label><input type="checkbox" data-dataset="2" checked> Humidity</label>
+                                <label><input type="checkbox" data-dataset="3" checked> Rain Probability</label>
+                                <label><input type="checkbox" data-dataset="4" checked> Wind Speed</label>
+                            </div>
+                        </div>
+                        <div class="chart-container mt-5">
                             <!-- Chart Display Section -->
                             <div class="chart-wrapper mt-5">
                                 <canvas id="forecastChart"></canvas>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-
             </div>
         </div>
     </main>

@@ -37,10 +37,10 @@
                 <label for="cropName" class="form-label">Crop Name</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-seedling"></i></span>
-                    <input type="text" class="form-control @error('crop_name') is-invalid @enderror" id="cropName"
-                        name="crop_name" value="{{ old('crop_name', $damageReport->crop_name) }}" required>
+                    <input type="text" class="form-control @error('cropName') is-invalid @enderror" id="cropName"
+                        name="cropName" value="{{ old('cropName', $damageReport->cropName) }}" required>
                 </div>
-                @error('crop_name')
+                @error('cropName')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

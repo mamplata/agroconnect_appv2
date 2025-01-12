@@ -14,24 +14,24 @@ class DamageReportSeeder extends Seeder
 
         // Damage report data
         $damageData = [
-            ['crop_name' => 'Squash', 'variety' => 'Suprema'],
-            ['crop_name' => 'Rice', 'variety' => 'N/A'],
-            ['crop_name' => 'Upo', 'variety' => 'Mayumi'],
-            ['crop_name' => 'Watermelon', 'variety' => 'Sugarbaby Max'],
-            ['crop_name' => 'Eggplant', 'variety' => 'Fortuner'],
-            ['crop_name' => 'Tomato', 'variety' => 'Diamante Max'],
-            ['crop_name' => 'Ampalaya', 'variety' => 'Glaxy'],
-            ['crop_name' => 'Watermelon', 'variety' => 'Jaguar'],
-            ['crop_name' => 'Upo', 'variety' => 'Tambuli'],
-            ['crop_name' => 'Eggplant', 'variety' => 'Calixto'],
-            ['crop_name' => 'Red Hot Pepper', 'variety' => 'Superheat'],
+            ['cropName' => 'Squash', 'variety' => 'Suprema'],
+            ['cropName' => 'Rice', 'variety' => 'N/A'],
+            ['cropName' => 'Upo', 'variety' => 'Mayumi'],
+            ['cropName' => 'Watermelon', 'variety' => 'Sugarbaby Max'],
+            ['cropName' => 'Eggplant', 'variety' => 'Fortuner'],
+            ['cropName' => 'Tomato', 'variety' => 'Diamante Max'],
+            ['cropName' => 'Ampalaya', 'variety' => 'Glaxy'],
+            ['cropName' => 'Watermelon', 'variety' => 'Jaguar'],
+            ['cropName' => 'Upo', 'variety' => 'Tambuli'],
+            ['cropName' => 'Eggplant', 'variety' => 'Calixto'],
+            ['cropName' => 'Red Hot Pepper', 'variety' => 'Superheat'],
         ];
 
         // Add 'type' to each crop entry
         foreach ($damageData as &$data) {
-            if ($data['crop_name'] === 'Rice') {
+            if ($data['cropName'] === 'Rice') {
                 $data['type'] = 'Rice';
-            } elseif ($data['crop_name'] === 'Watermelon') {
+            } elseif ($data['cropName'] === 'Watermelon') {
                 $data['type'] = 'Fruits';
             } else {
                 $data['type'] = 'Vegetables';
@@ -76,7 +76,7 @@ class DamageReportSeeder extends Seeder
                 DamageReport::create([
                     'user_id' => 2,
                     'modified_by' => 2,
-                    'crop_name' => $crop['crop_name'],
+                    'cropName' => $crop['cropName'],
                     'variety' => $crop['variety'],
                     'type' => $crop['type'],
                     'damage_type' => $damageType,

@@ -12,7 +12,7 @@ class DamageReport extends Model
     protected $fillable = [
         'user_id',
         'modified_by',
-        'crop_name',
+        'cropName',
         'variety',
         'type',
         'damage_type',   // Natural Disaster, Pest, Disease

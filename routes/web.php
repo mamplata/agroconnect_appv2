@@ -27,7 +27,9 @@ Route::get('trends/info/{crop_id}', [AdditionalInformationController::class, 'sh
 Route::get('/weather_forecasts', [WeatherForecastController::class, 'index'])->name('weather_forecasts.index');
 
 //DAMAGES
-Route::get('/damages', [DamageReportController::class, 'stats'])->name('damages.index');
+Route::get('damages/pests', [DamageReportController::class, 'pests'])->name('damages.pests');
+Route::get('damages/diseases', [DamageReportController::class, 'diseases'])->name('damages.diseases');
+Route::get('damages/natural-disaster', [DamageReportController::class, 'disasters'])->name('damages.disasters');
 
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {

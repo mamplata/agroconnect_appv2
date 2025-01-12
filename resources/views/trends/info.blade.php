@@ -76,7 +76,7 @@
 
         <!-- Back Button -->
         <div class="text-center mt-5">
-            <a href="/trends" class="btn btn-primary btn-lg">Back</a>
+            <a href="/trends" class="btn btn-dark btn-lg">Back</a>
         </div>
     </main>
 

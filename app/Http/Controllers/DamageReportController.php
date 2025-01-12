@@ -8,17 +8,25 @@ use Carbon\Carbon;
 
 class DamageReportController extends Controller
 {
-    public function stats(Request $request)
-    {
-        // Fetch all damage data
-        $data = DamageReport::orderBy('monthObserved')->get();
 
-        // Group data by cropName and variety
+    public function pests()
+    {
+        // Fetch all pest damage data where area_planted and area_affected are not zero
+        $data = DamageReport::where('damage_type', 'Pest')
+            ->where('area_planted', '>', 0)
+            ->where('area_affected', '>', 0)
+            ->orderBy('monthObserved')
+            ->get();
+
+        // Group data by cropName and variety, replacing "N/A" or null with an empty string
         $groupedData = $data->groupBy(function ($item) {
-            return $item->crop_name . ' - ' . $item->variety;
+            $variety = $item->variety;
+            // Replace "N/A" or null with an empty string
+            $variety = ($variety === 'N/A' || $variety === null) ? '' : $variety;
+            return $item->cropName . ' - ' . $variety;
         });
 
-        // Prepare datasets for grouped bar chart
+        // Prepare datasets for grouped stacked bar chart
         $groupedChartData = [
             'labels' => $data->pluck('monthObserved')
                 ->map(function ($date) {
@@ -29,49 +37,175 @@ class DamageReportController extends Controller
             'datasets' => [],
         ];
 
-        foreach ($groupedData as $key => $group) {
-            // Add Area Planted dataset
-            $groupedChartData['datasets'][] = [
-                'label' => $key . ' (Area Planted)',
-                'data' => $groupedChartData['labels']->map(function ($month) use ($group) {
-                    return $group->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_planted');
-                }),
-                'backgroundColor' => 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.5)',  // Random color
-                'borderColor' => 'rgba(0,0,0,0.1)',
-                'borderWidth' => 1,
-            ];
+        // Prepare data for the pie chart (summed area_affected per damage_name)
+        $damageSummary = $data->groupBy('damage_name')->map(function ($group) {
+            return $group->sum('area_affected');
+        });
 
-            // Add Area Affected dataset
-            $groupedChartData['datasets'][] = [
-                'label' => $key . ' (Area Affected)',
-                'data' => $groupedChartData['labels']->map(function ($month) use ($group) {
-                    return $group->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_affected');
-                }),
-                'backgroundColor' => 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.8)',  // Random color
-                'borderColor' => 'rgba(0,0,0,0.1)',
-                'borderWidth' => 1,
-            ];
-        }
-
-        // Prepare data for the pie chart
         $pieChartData = [
-            'labels' => $groupedData->keys(),
-            'datasets' => [
-                [
-                    'label' => 'Total Areas',
-                    'data' => $groupedData->map(function ($group) {
-                        return $group->sum('area_affected') / $group->sum('area_planted') * 100; // Percentage affected
-                    })->values(),
-                    'backgroundColor' => $groupedData->keys()->map(function () {
-                        return 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ', 0.8)';
-                    })->toArray(),
-                ],
-            ],
+            'labels' => $damageSummary->keys(),
+            'data' => $damageSummary->values(),
         ];
 
-        return view('damages.index', compact('groupedChartData', 'pieChartData'));
+        foreach ($groupedData as $groupKey => $group) {
+            // Group by damage name to stack values within the same crop variety
+            $damageGroups = $group->groupBy('damage_name');
+
+            foreach ($damageGroups as $damageName => $damageGroup) {
+                $datasetKey = $groupKey . ' (' . $damageName . ')';
+                $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ',';
+
+                // Add stacked dataset
+                $groupedChartData['datasets'][] = [
+                    'label' => $datasetKey,
+                    'data' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_affected');
+                    }),
+                    'backgroundColor' => $color . ' 0.8)', // Random color with opacity
+                    'borderColor' => $color . ' 1)',
+                    'borderWidth' => 1,
+                    'stack' => $groupKey, // Use crop variety as stack key
+                    'areaPlantedData' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_planted');
+                    }),
+                ];
+            }
+        }
+
+        return view('damages.pests', compact('groupedChartData', 'pieChartData'));
     }
 
+    public function diseases()
+    {
+        // Fetch all diseases damage data where area_planted and area_affected are not zero
+        $data = DamageReport::where('damage_type', 'Disease')
+            ->where('area_planted', '>', 0)
+            ->where('area_affected', '>', 0)
+            ->orderBy('monthObserved')
+            ->get();
+
+        // Group data by cropName and variety, replacing "N/A" or null with an empty string
+        $groupedData = $data->groupBy(function ($item) {
+            $variety = $item->variety;
+            // Replace "N/A" or null with an empty string
+            $variety = ($variety === 'N/A' || $variety === null) ? '' : $variety;
+            return $item->cropName . ' - ' . $variety;
+        });
+
+        // Prepare datasets for grouped stacked bar chart
+        $groupedChartData = [
+            'labels' => $data->pluck('monthObserved')
+                ->map(function ($date) {
+                    return \Carbon\Carbon::createFromFormat('Y-m', $date)->format('F Y');
+                })
+                ->unique()
+                ->values(),
+            'datasets' => [],
+        ];
+
+        // Prepare data for the pie chart (summed area_affected per damage_name)
+        $damageSummary = $data->groupBy('damage_name')->map(function ($group) {
+            return $group->sum('area_affected');
+        });
+
+        $pieChartData = [
+            'labels' => $damageSummary->keys(),
+            'data' => $damageSummary->values(),
+        ];
+
+        foreach ($groupedData as $groupKey => $group) {
+            // Group by damage name to stack values within the same crop variety
+            $damageGroups = $group->groupBy('damage_name');
+
+            foreach ($damageGroups as $damageName => $damageGroup) {
+                $datasetKey = $groupKey . ' (' . $damageName . ')';
+                $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ',';
+
+                // Add stacked dataset
+                $groupedChartData['datasets'][] = [
+                    'label' => $datasetKey,
+                    'data' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_affected');
+                    }),
+                    'backgroundColor' => $color . ' 0.8)', // Random color with opacity
+                    'borderColor' => $color . ' 1)',
+                    'borderWidth' => 1,
+                    'stack' => $groupKey, // Use crop variety as stack key
+                    'areaPlantedData' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_planted');
+                    }),
+                ];
+            }
+        }
+
+        return view('damages.diseases', compact('groupedChartData', 'pieChartData'));
+    }
+
+    public function disasters()
+    {
+        // Fetch all disasters damage data where area_planted and area_affected are not zero
+        $data = DamageReport::where('damage_type', 'Natural Disaster')
+            ->where('area_planted', '>', 0)
+            ->where('area_affected', '>', 0)
+            ->orderBy('monthObserved')
+            ->get();
+
+        // Group data by cropName and variety, replacing "N/A" or null with an empty string
+        $groupedData = $data->groupBy(function ($item) {
+            $variety = $item->variety;
+            // Replace "N/A" or null with an empty string
+            $variety = ($variety === 'N/A' || $variety === null) ? '' : $variety;
+            return $item->cropName . ' - ' . $variety;
+        });
+
+        // Prepare datasets for grouped stacked bar chart
+        $groupedChartData = [
+            'labels' => $data->pluck('monthObserved')
+                ->map(function ($date) {
+                    return \Carbon\Carbon::createFromFormat('Y-m', $date)->format('F Y');
+                })
+                ->unique()
+                ->values(),
+            'datasets' => [],
+        ];
+
+        // Prepare data for the pie chart (summed area_affected per natural_disaster_type)
+        $damageSummary = $data->groupBy('natural_disaster_type')->map(function ($group) {
+            return $group->sum('area_affected');
+        });
+
+        $pieChartData = [
+            'labels' => $damageSummary->keys(),
+            'data' => $damageSummary->values(),
+        ];
+
+        foreach ($groupedData as $groupKey => $group) {
+            // Group by damage name to stack values within the same crop variety
+            $damageGroups = $group->groupBy('natural_disaster_type');
+
+            foreach ($damageGroups as $damageName => $damageGroup) {
+                $datasetKey = $groupKey . ' (' . $damageName . ')';
+                $color = 'rgba(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ',';
+
+                // Add stacked dataset
+                $groupedChartData['datasets'][] = [
+                    'label' => $datasetKey,
+                    'data' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_affected');
+                    }),
+                    'backgroundColor' => $color . ' 0.8)', // Random color with opacity
+                    'borderColor' => $color . ' 1)',
+                    'borderWidth' => 1,
+                    'stack' => $groupKey, // Use crop variety as stack key
+                    'areaPlantedData' => $groupedChartData['labels']->map(function ($month) use ($damageGroup) {
+                        return $damageGroup->where('monthObserved', \Carbon\Carbon::parse($month)->format('Y-m'))->sum('area_planted');
+                    }),
+                ];
+            }
+        }
+
+        return view('damages.disasters', compact('groupedChartData', 'pieChartData'));
+    }
     /**
      * Display a listing of the resource.
      */
@@ -150,7 +284,7 @@ class DamageReportController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'crop_name' => 'required|string|max:255',
+            'cropName' => 'required|string|max:255',
             'variety' => 'required|string|max:255',
             'type' => 'required|in:Vegetables,Fruits,Rice',
             'damage_type' => 'required|in:Natural Disaster,Pest,Disease',
@@ -189,7 +323,7 @@ class DamageReportController extends Controller
     public function update(Request $request, DamageReport $damageReport)
     {
         $validatedData = $request->validate([
-            'crop_name' => 'required|string|max:255',
+            'cropName' => 'required|string|max:255',
             'variety' => 'required|string|max:255',
             'type' => 'required|in:Vegetables,Fruits,Rice',
             'damage_type' => 'required|in:Natural Disaster,Pest,Disease',

@@ -100,7 +100,7 @@
                     @foreach ($damageReports as $index => $damageReport)
                         <tr>
                             <td>{{ $damageReports->firstItem() + $index }}</td>
-                            <td>{{ $damageReport->crop_name }}</td>
+                            <td>{{ $damageReport->cropName }}</td>
                             <td>{{ $damageReport->variety }}</td>
                             <td>{{ $damageReport->type }}</td>
                             <td>{{ $damageReport->damage_type }}</td>

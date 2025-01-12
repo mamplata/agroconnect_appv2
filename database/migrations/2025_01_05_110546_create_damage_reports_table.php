@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(); // Foreign key for user
             $table->unsignedBigInteger('modified_by')->nullable(); // Foreign key for user who modified the record
-            $table->string('crop_name');
+            $table->string('cropName');
             $table->string('variety');
             $table->enum('type', ['Rice', 'Vegetables', 'Fruits']);  // Crop type
             $table->enum('damage_type', ['Natural Disaster', 'Pest', 'Disease']);

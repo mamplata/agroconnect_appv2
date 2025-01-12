@@ -154,15 +154,23 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: false, // Maintain a fixed aspect ratio
             plugins: {
                 legend: {
                     position: "top",
                 },
                 tooltip: {
+                    enabled: true, // Make sure tooltips are enabled globally
                     callbacks: {
                         title: function (tooltipItem) {
+                            // Adjust the tooltip title behavior if needed
                             return tooltipItem[0].label;
+                        },
+                        label: function (tooltipItem) {
+                            const datasetLabel =
+                                tooltipItem.dataset.label || "";
+                            const value = tooltipItem.raw;
+                            return `${datasetLabel}: ${value}`;
                         },
                     },
                 },
@@ -258,6 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
             checkbox.checked = false;
             forecastChart.data.datasets[index].hidden = true;
         });
+
         forecastChart.update();
     });
 });
