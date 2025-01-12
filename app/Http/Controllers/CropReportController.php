@@ -9,14 +9,20 @@ use Illuminate\Http\Request;
 class CropReportController extends Controller
 {
 
-    public function price(Request $request, $cropName, $variety)
+    public function price(Request $request, $cropName, $variety = null)
     {
-        // Start the query to retrieve the price data for the specified crop name and variety
-        $query = CropReport::where('cropName', $cropName)
-            ->where('variety', $variety)
-            ->orderBy('monthObserved'); // Sort by monthObserved for easier comparison
+        // Start the query to retrieve the price data for the specified crop name
+        $query = CropReport::where('cropName', $cropName);
 
-        // Get the price data
+        // If the variety is provided and not 'N/A', add it to the query
+        if ($variety && $variety !== 'N/A') {
+            $query->where('variety', $variety);
+        }
+
+        // Order by monthObserved for easier comparison
+        $query->orderBy('monthObserved');
+
+        // Get the price data with pagination
         $prices = $query->paginate(5); // Add pagination here
 
         // Transform to calculate status and format the date before applying sorting or filtering
@@ -96,6 +102,7 @@ class CropReportController extends Controller
         return view('trends.price', compact('prices', 'cropName', 'variety'));
     }
 
+
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -147,13 +154,17 @@ class CropReportController extends Controller
         return view('admin.crop_reports.index', compact('cropReports', 'search', 'type', 'sortBy', 'sortOrder'));
     }
 
-    public function stats(Request $request, $cropName, $variety)
+    public function stats(Request $request, $cropName, $variety = null)
     {
-        // Fetch data for the specified cropName and variety
-        $data = CropReport::where('cropName', $cropName)
-            ->where('variety', $variety)
-            ->orderBy('monthObserved')
-            ->get();
+        // Fetch data for the specified cropName and variety (if variety is provided)
+        $query = CropReport::where('cropName', $cropName);
+
+        // Only filter by variety if it's provided and not 'N/A'
+        if ($variety && $variety !== 'N/A') {
+            $query->where('variety', $variety);
+        }
+
+        $data = $query->orderBy('monthObserved')->get();
 
         // Format the data for Chart.js
         $chartData = [
@@ -198,6 +209,7 @@ class CropReportController extends Controller
 
         return view('trends.stats', compact('chartData', 'cropName', 'variety'));
     }
+
 
 
     public function create()

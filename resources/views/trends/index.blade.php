@@ -86,11 +86,11 @@
                                 </td>
 
                                 <td>
-                                    <a href="{{ route('trends.price', ['cropName' => $crop->cropName, 'variety' => $crop->variety]) }}"
+                                    <a href="{{ route('trends.price', ['cropName' => $crop->cropName, 'variety' => $crop->variety === 'N/A' || !$crop->variety ? '' : $crop->variety]) }}"
                                         class="btn btn-primary btn-sm mb-2 me-1 d-block w-100">
                                         <i class="fas fa-tag"></i> Price
                                     </a>
-                                    <a href="{{ route('trends.stats', ['cropName' => $crop->cropName, 'variety' => $crop->variety]) }}"
+                                    <a href="{{ route('trends.stats', ['cropName' => $crop->cropName, 'variety' => $crop->variety === 'N/A' || !$crop->variety ? '' : $crop->variety]) }}"
                                         class="btn btn-success btn-sm mb-2 me-1 d-block w-100">
                                         <i class="fas fa-chart-line"></i> Stats
                                     </a>

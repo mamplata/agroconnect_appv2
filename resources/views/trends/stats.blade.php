@@ -19,7 +19,12 @@
     @include('header')
     <main class="container my-5">
         <div class="chart-container">
-            <h2 class="text-center mb-4">Crop Monitoring: {{ $cropName }} ({{ $variety }})</h2>
+            <h2 class="text-center mb-4">
+                Crop Monitoring: {{ ucfirst($cropName) }}
+                @if ($variety && $variety !== 'N/A')
+                    ({{ ucfirst($variety) }})
+                @endif
+            </h2>
             <!-- Chart Selection Section (Placed Above the Chart) -->
             <div class="chart-controls mt-3 text-center">
                 <div>

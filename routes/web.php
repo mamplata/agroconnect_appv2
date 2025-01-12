@@ -19,8 +19,8 @@ Route::get('/', function () {
 
 //TRENDS
 Route::get('/trends',  [CropController::class, 'trends'])->name('trends.index');
-Route::get('trends/price/{cropName}/{variety}', [CropReportController::class, 'price'])->name('trends.price');
-Route::get('trends/stats/{cropName}/{variety}', [CropReportController::class, 'stats'])->name('trends.stats');
+Route::get('trends/price/{cropName}/{variety?}', [CropReportController::class, 'price'])->name('trends.price');
+Route::get('trends/stats/{cropName}/{variety?}', [CropReportController::class, 'stats'])->name('trends.stats');
 Route::get('trends/info/{crop_id}', [AdditionalInformationController::class, 'showInformation'])->name('trends.info');
 
 //WEATHER FORECAST

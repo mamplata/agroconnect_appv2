@@ -47,7 +47,12 @@
         </form>
 
         <h1 class="text-center mb-4">Price Monitoring</h1>
-        <h3 class="text-center mb-4">Commodity: {{ ucfirst($cropName) }} - {{ ucfirst($variety) }}</h3>
+        <h3 class="text-center mb-4">
+            Commodity: {{ ucfirst($cropName) }}
+            @if ($variety && $variety !== 'N/A')
+                - {{ ucfirst($variety) }}
+            @endif
+        </h3>
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
