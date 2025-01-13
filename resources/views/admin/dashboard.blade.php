@@ -52,6 +52,7 @@
             </div>
         </div>
 
+
         <!-- Full-Width Chart Selection Section -->
         <div class="col-12">
             <div class="card mb-4 shadow-lg border-0 rounded-lg w-100">
@@ -77,9 +78,21 @@
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4 shadow-lg border-0 rounded-lg w-100">
-                    <div class="card-header bg-success text-white rounded-top">
+                    <div
+                        class="card-header bg-success text-white rounded-top d-flex justify-content-between align-items-center">
                         <h5>Model Update Trends</h5>
+                        <div>
+                            <button class="btn" id="downloadChart"
+                                style="background-color: #218838; border-color: #1e7e34;">
+                                <i class="fas fa-chart-line"></i>
+                            </button>
+                            <button class="btn" id="downloadData"
+                                style="background-color: #ffc107; border-color: #e0a800;">
+                                <i class="fas fa-file-download"></i>
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card-body">
                         <div class="chart-wrapper">
                             <canvas id="updateChart"></canvas>
@@ -97,90 +110,7 @@
 
         // Chart.js data
         const labels = @json($labels); // Dates (if applicable)
-
-        const updateChart = new Chart(document.getElementById('updateChart'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Update Count'
-                        },
-                        beginAtZero: true
-                    }
-                },
-                elements: {
-                    point: {
-                        radius: 6 // Adjust this value to make the circles bigger or smaller
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        mode: 'nearest', // Ensures tooltip shows for the closest point
-                        intersect: false, // Allows the tooltip to display for points near the cursor
-                        callbacks: {
-                            label: function(context) {
-                                const datasetLabel = context.dataset.label || 'Dataset';
-                                const value = context.raw;
-                                return `${datasetLabel}: ${value}`;
-                            }
-                        }
-                    }
-                },
-                interaction: {
-                    mode: 'index', // Tooltip will display all datasets for a single X-axis value
-                    axis: 'x', // Tooltips will respond horizontally
-                    intersect: false // Tooltip activates even if the cursor is between points
-                }
-            }
-        });
-
-
-        // Toggle visibility of datasets
-        const checkboxes = document.querySelectorAll('#datasetControls input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', (event) => {
-                const datasetIndex = event.target.dataset.dataset;
-                updateChart.data.datasets[datasetIndex].hidden = !event.target.checked;
-                updateChart.update();
-            });
-        });
-
-        // Select all datasets
-        document.getElementById('selectAll').addEventListener('click', () => {
-            checkboxes.forEach(checkbox => checkbox.checked = true);
-            datasets.forEach((dataset, index) => updateChart.data.datasets[index].hidden = false);
-            updateChart.update();
-        });
-
-        // Unselect all datasets
-        document.getElementById('unselectAll').addEventListener('click', () => {
-            checkboxes.forEach(checkbox => checkbox.checked = false);
-            datasets.forEach((dataset, index) => updateChart.data.datasets[index].hidden = true);
-            updateChart.update();
-        });
-
-        // Display Current Month and Year
-        const currentDate = new Date();
-        const month = currentDate.toLocaleString('default', {
-            month: 'short'
-        }); // Short month name (e.g., "Jan")
-        const year = currentDate.getFullYear();
-
-        document.getElementById('currentYear').textContent = year; // Display year above month
-        document.getElementById('currentMonth').textContent = month; // Display month in larger font
     </script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/download.js') }}"></script>
 </x-app-layout>

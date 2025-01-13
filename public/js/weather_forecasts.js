@@ -269,4 +269,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         forecastChart.update();
     });
+
+    // Button event listeners
+    document
+        .getElementById("downloadChart")
+        .addEventListener("click", function () {
+            downloadChartImage(forecastChart);
+        });
+
+    document.getElementById("downloadData").addEventListener("click", () => {
+        const labels = forecastChart.data.labels;
+        const datasets = forecastChart.data.datasets;
+        downloadChartData(labels, datasets);
+    });
 });

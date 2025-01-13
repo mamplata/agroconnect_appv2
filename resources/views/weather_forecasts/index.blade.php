@@ -47,8 +47,21 @@
                                 <label><input type="checkbox" data-dataset="4" checked> Wind Speed</label>
                             </div>
                         </div>
-                        <div class="chart-container mt-5">
+                        <div class=" chart-container mt-5">
                             <!-- Chart Display Section -->
+                            <div class="pe-5 ps-5 rounded-top d-flex justify-content-between align-items-center">
+                                <h5>Weather Forecast Trend</h5>
+                                <div>
+                                    <button class="btn" id="downloadChart"
+                                        style="background-color: #218838; border-color: #1e7e34;">
+                                        <i class="fas fa-chart-line"></i>
+                                    </button>
+                                    <button class="btn" id="downloadData"
+                                        style="background-color: #ffc107; border-color: #e0a800;">
+                                        <i class="fas fa-file-download"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="chart-wrapper mt-5">
                                 <canvas id="forecastChart"></canvas>
                             </div>
@@ -62,6 +75,7 @@
         const weatherData = @json($weatherData);
     </script>
     <script src="{{ asset('js/weather_forecasts.js') }}"></script>
+    <script src="{{ asset('js/download.js') }}"></script>
     @include('footer')
 </body>
 
