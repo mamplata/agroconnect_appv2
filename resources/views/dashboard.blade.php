@@ -16,7 +16,8 @@
                 </div>
             @endif
             <div class="row">
-                <div class="col-md-6 d-flex">
+                <!-- Welcome Card -->
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
                     <div class="card mb-4 shadow-lg border-0 rounded-lg w-100">
                         <div class="card-header bg-primary text-white rounded-top">
                             <h5 class="font-semibold text-lg text-center">Welcome, {{ Auth::user()->name }}!</h5>
@@ -32,78 +33,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 mb-4">
-                    <div id="forecast">
-                        @php
-                            $forecastDay = $weatherData['DailyForecasts'][0];
-                            $date = \Carbon\Carbon::parse($forecastDay['Date']);
-                            $formattedDate = $date->format('l, F j, Y');
-                            $iconCode = str_pad($forecastDay['Day']['Icon'], 2, '0', STR_PAD_LEFT);
-                            $iconUrl = "https://developer.accuweather.com/sites/default/files/{$iconCode}-s.png";
-                        @endphp
-
-                        <div class="card shadow border-0">
-                            <div class="card-header bg-primary text-white text-center rounded-top">
-                                <h3 class="font-semibold text-lg text-center">🌦️ <strong>Today's Weather</strong> 🌦️
-                                </h3>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="row align-items-center">
-                                    <h5 class="mb-2 text-center"><strong>{{ $formattedDate }}</strong></h5>
-                                    <div class="col icon-section d-flex flex-column align-items-center">
-                                        <img width="150px" src="{{ $iconUrl }}"
-                                            alt="{{ $forecastDay['Day']['IconPhrase'] }}"
-                                            class="weather-icon img-fluid cursor-pointer" style="cursor: pointer;"
-                                            data-bs-toggle="tooltip" title="{{ $forecastDay['Day']['IconPhrase'] }}">
-                                        <span
-                                            class="text-center"><strong>{{ $forecastDay['Day']['IconPhrase'] }}</strong></span>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <ul class="list-group list-group-flush">
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                <strong><span><i class="fas fa-temperature-high text-danger me-2"></i>
-                                                        Max Temperature</span></strong>
-                                                <strong><span
-                                                        class="badge bg-danger rounded-pill">{{ $forecastDay['Temperature']['Maximum']['Value'] }}°C</span></strong>
-                                            </li>
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                <strong><span><i class="fas fa-temperature-low text-primary me-2"></i>
-                                                        Min Temperature</span></strong>
-                                                <strong><span
-                                                        class="badge bg-primary rounded-pill">{{ $forecastDay['Temperature']['Minimum']['Value'] }}°C</span></strong>
-                                            </li>
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                <strong><span><i class="fas fa-tint text-info me-2"></i> Average
-                                                        Humidity</span></strong>
-                                                <strong><span
-                                                        class="badge bg-info rounded-pill">{{ $forecastDay['Day']['RelativeHumidity']['Average'] }}%</span></strong>
-                                            </li>
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                <strong><span><i class="fas fa-cloud-rain text-primary me-2"></i> Rain
-                                                        Probability</span></strong>
-                                                <strong><span
-                                                        class="badge bg-primary rounded-pill">{{ $forecastDay['Day']['RainProbability'] }}%</span></strong>
-                                            </li>
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                <strong><span><i class="fas fa-wind text-muted me-2"></i> Wind
-                                                        Speed</span></strong>
-                                                <strong><span
-                                                        class="badge bg-secondary rounded-pill">{{ $forecastDay['Day']['Wind']['Speed']['Value'] }}
-                                                        km/h</span></strong>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Weather Forecast Section Removed -->
             </div>
             <h3 class="font-semibold text-lg mb-4 text-center">Key Features</h3>
 

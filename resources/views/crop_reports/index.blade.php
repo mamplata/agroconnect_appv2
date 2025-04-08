@@ -98,7 +98,7 @@
                         <tr>
                             <td>{{ $cropReports->firstItem() + $index }}</td>
                             <td>{{ $cropReport->cropName }}</td>
-                            <td>{{ $cropReport->variety }}</td>
+                            <td>{{ $cropReport->variety ?? 'N/A' }}</td>
                             <td>{{ $cropReport->type }}</td>
                             <td>{{ $cropReport->areaPlanted }}</td>
                             <td>{{ $cropReport->productionVolume }}</td>

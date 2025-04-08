@@ -17,7 +17,8 @@
             <div class="input-group">
                 <div class="row w-100">
                     <div class="col-md-3">
-                        <select name="price" class="form-control">
+                        <label for="price">Filter by Price</label>
+                        <select name="price" class="form-control" id="price">
                             <option value="" {{ request('price') == '' ? 'selected' : '' }}>None</option>
                             <option value="asc" {{ request('price') == 'asc' ? 'selected' : '' }}>Ascend</option>
                             <option value="desc" {{ request('price') == 'desc' ? 'selected' : '' }}>Descend</option>
@@ -26,11 +27,14 @@
 
                     <!-- Date Filter -->
                     <div class="col-md-3">
-                        <input type="date" name="start_date" class="form-control"
+                        <label for="start_date">Start Date</label>
+                        <input type="date" name="start_date" class="form-control" id="start_date"
                             value="{{ request('start_date') }}">
                     </div>
                     <div class="col-md-3">
-                        <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                        <label for="end_date">End Date</label>
+                        <input type="date" name="end_date" class="form-control" id="end_date"
+                            value="{{ request('end_date') }}">
                     </div>
 
                     <div class="col-md-3 d-flex">
@@ -38,7 +42,7 @@
                             <i class="fas fa-search"></i> Search
                         </button>
                         <a href="{{ route('trends.price', ['cropName' => $cropName, 'variety' => $variety]) }}"
-                            class="btn btn-secondary">
+                            class="btn btn-secondary d-flex justify-content-center align-items-center ">
                             <i class="fas fa-redo"></i> Reset
                         </a>
                     </div>
@@ -64,15 +68,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($prices as $price)
+                    
+                    @if ($prices->isNotEmpty())
+                        @foreach ($prices as $price)
+                            <tr>
+                                <td>{{ $price->date }}</td>
+                                <td>{{ number_format($price->price, 2) }}</td>
+                                <td>
+                                    <i class="{{ $price->statusIcon }}"></i> {{ $price->status }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td>{{ $price->date }}</td>
-                            <td>{{ number_format($price->price, 2) }}</td>
-                            <td>
-                                <i class="{{ $price->statusIcon }}"></i> {{ $price->status }}
-                            </td>
+                            <td colspan="3" class="text-center fs-5">No prices available.</td>
                         </tr>
-                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

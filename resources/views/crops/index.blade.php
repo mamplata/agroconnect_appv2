@@ -82,7 +82,7 @@
                                 @endif
                             </td>
                             <td>{{ $crop->cropName }}</td>
-                            <td>{{ $crop->variety }}</td>
+                            <td>{{ $crop->variety ?? 'N/A' }}</td>
                             <td>{{ $crop->type }}</td>
                             <td>{{ $crop->description }}</td>
                             <td>{{ $crop->planting_period }}</td>

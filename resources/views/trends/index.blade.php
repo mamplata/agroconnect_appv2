@@ -61,30 +61,29 @@
                         @foreach ($crops as $crop)
                             <tr class="text-center">
                                 <td>
-                                    <img src="{{ $crop->img ? $crop->img : 'https://via.placeholder.com/640x480.png/00cc99?text=No+Image+Available' }}"
-                                        alt="{{ $crop->cropName }}" class="img-fluid"
-                                        style="max-width: 150px; height: auto;">
+                                 <img src="{{ $crop->img ? $crop->img : 'https://placehold.co/640x480/00cc99/FFFFFF?text=No+Image+Available' }}"
+                                    alt="{{ $crop->cropName }}" class="img-fluid"
+                                    style="max-width: 150px; height: auto;">
                                 </td>
                                 <td>{{ $crop->cropName }}</td>
-                                <td>{{ $crop->variety }}</td>
+                                <td>{{ $crop->variety ?? 'N/A' }}</td>
                                 <td>
-                                    @if ($crop->latest_price > $crop->previous_price)
+                                    @if (is_null($crop->latest_price))
+                                        <span class="text-muted">N/A</span>
+                                    @elseif ($crop->latest_price > $crop->previous_price)
                                         <span class="text-success">
                                             <i class="fas fa-arrow-up"></i> {{ number_format($crop->latest_price, 2) }}
                                         </span>
-                                    @elseif($crop->latest_price < $crop->previous_price)
+                                    @elseif ($crop->latest_price < $crop->previous_price)
                                         <span class="text-danger">
-                                            <i class="fas fa-arrow-down"></i>
-                                            {{ number_format($crop->latest_price, 2) }}
+                                            <i class="fas fa-arrow-down"></i> {{ number_format($crop->latest_price, 2) }}
                                         </span>
                                     @else
                                         <span class="text-muted">
-                                            <i class="fas fa-arrow-right"></i>
-                                            {{ number_format($crop->latest_price, 2) }}
+                                            <i class="fas fa-arrow-right"></i> {{ number_format($crop->latest_price, 2) }}
                                         </span>
                                     @endif
                                 </td>
-
                                 <td>
                                     <a href="{{ route('trends.price', ['cropName' => $crop->cropName, 'variety' => $crop->variety === 'N/A' || !$crop->variety ? '' : $crop->variety]) }}"
                                         class="btn btn-primary btn-sm mb-2 me-1 d-block w-100">
